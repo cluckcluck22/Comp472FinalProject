@@ -55,8 +55,8 @@ public class ManualInputHandler {
         		//Check for valid char
         		if(mapA.containsKey(line))
         		{
-        			//TODO send input to input handler.
         			System.out.println("Valid move "+line+ " received");
+        			InputInterface.updateBoard(mapA.get(line));
         		}
         		else
         		{

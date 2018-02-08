@@ -16,7 +16,7 @@ package candyCrisis;
 
 public class InputInterface {
 	
-	public boolean updateBoard(char item)
+	public static boolean updateBoard(char item)
 	{
 		//TODO check if input valid, fail and return false otherwise
 		if(true)
