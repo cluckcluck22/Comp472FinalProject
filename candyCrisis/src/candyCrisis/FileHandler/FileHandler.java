@@ -1,13 +1,18 @@
 package candyCrisis.FileHandler;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import candyCrisis.Result;
 
 /* Class: FileHandler.java
  * Programmer: Jesse Tsang
@@ -22,9 +27,9 @@ public class FileHandler
 	private static final int MAX_COLUMN = 15;
 	static char[][] results = new char[MAX_ROW][MAX_COLUMN];
 	
-	
-	private static final String ABS_PATH = "src/Resources/Sample_Data.txt";
-	
+	private static final String ABS_PATH_READ = "src/Resources/Sample_Data.txt";
+	private static String pathWrite = "src/Resources/";
+	int outputCounter = 0;
 	
 	//Static method for BoardStateHandler() to get starting board from a txt file.
 	//Input: None
@@ -32,7 +37,7 @@ public class FileHandler
 	public static char[][] getStartBoard()
 	{
 		//Get NIO Path
-		Path path = Paths.get(ABS_PATH);
+		Path path = Paths.get(ABS_PATH_READ);
 	
 		List<String> resultList = new ArrayList<>();
 			
@@ -49,17 +54,12 @@ public class FileHandler
 			{
 				for (int j = 0; j < MAX_COLUMN; j++)
 				{
-					results[i][j] = resultList.get(i).charAt(counter);
-									
-					//System.out.println("J is: " + j + "... and char is " + resultList.get(i).charAt(counter));
-					//System.out.print(resultList.get(i).charAt(counter));
-					
+					results[i][j] = resultList.get(i).charAt(counter);									
+
 					counter = counter + 2;
 				}
 				
 				counter = 0; //Reset for each line
-				
-				System.out.println("");
 			}
 			
 		}
@@ -67,9 +67,6 @@ public class FileHandler
 		{
 			e.printStackTrace();
 		}
-				
-		//Generate dummy 2D array for testing.
-		//results = getDummyArray();
 		
 		return results;	
 	}
@@ -77,11 +74,29 @@ public class FileHandler
 	//Static method for BoardStateHandler() to store the moves of a finished board.
 	//Input: Arraylist moveHistory, Arraylist totalTime
 	//Output: A text file that will store the array of moves, total completed time
-	public static void saveBoardResult(ArrayList<String> moveHistory, ArrayList<Integer> totalTime)
+	public static void saveBoardResult(ArrayList<Result> boardHistory)
 	{
 		int boardCount = 0;
 		String boardName = "Board" + boardCount;
-		boardCount++;
+			
+		try
+		{
+			//Get NIO Path
+			Path path = Paths.get(pathWrite + "Output_" + boardName + ".txt");
+			
+			for (Result r : boardHistory)
+			{
+				byte[] pathHistoryBA = (r.getPathHistory() + System.lineSeparator()).getBytes();
+				byte[] totalTimeBA = (String.valueOf(r.getTotalTime()) + System.lineSeparator()).getBytes();
+						
+				Files.write(path, pathHistoryBA, StandardOpenOption.APPEND);
+				Files.write(path, totalTimeBA, StandardOpenOption.APPEND);		
+			}		
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
 		
 		System.out.println("Board history saved to " + boardName + ".txt");
 	}
@@ -109,12 +124,13 @@ public class FileHandler
 
 	public static void main(String[] args)
 	{
-		ArrayList<String> moveHistory = new ArrayList<String>();
-		ArrayList<Integer> totalTime = new ArrayList<Integer>();
+		ArrayList<Result> boardHistory = new ArrayList<Result>();
+		boardHistory.add(new Result("GHMNOJ", 6));
+		boardHistory.add(new Result("NIDEJONIHCBG", 28));
+		boardHistory.add(new Result("HGBAFGLMNOJ", 8));
+	
+		saveBoardResult(boardHistory);
 		
-		//saveBoardResult(moveHistory, totalTime);
-		
-		getStartBoard();
+		//getStartBoard();
 	}
-
 }
