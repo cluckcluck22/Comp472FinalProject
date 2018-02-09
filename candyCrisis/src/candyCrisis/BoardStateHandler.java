@@ -6,10 +6,10 @@ package candyCrisis;
  * keeps the game history, number of moves done so far, and time. After every move, the boardStateHandler
  * will make a call to the GoalStateChecker to check if the board is in a goal state.
  * 
- * TODO: Test cases?
+ * TODO: Timer functionality & Test cases
  */
 
-import FileHandler.FileHandler;
+import candyCrisis.FileHandler.FileHandler;
 
 import java.util.ArrayList;
 
@@ -28,7 +28,9 @@ public class BoardStateHandler {
 	{
 		GAMESTATE = new char[numRow][numCol];	
 		empty = 0;//default empty location is 0, which is equivalent to A
+		numMoves = 0;
 		pathHistory = "";
+		totalTime=0.0f;
 	}
 	
 	//Method to setup the initial GAMESTATE, using a call to the FileHandler. This also sets int empty to the correct location.
@@ -45,6 +47,7 @@ public class BoardStateHandler {
 				}
 			}
 		}
+		//TODO Start Timer
 	}
 	
 	//Method to modify the GAMESTATE by moving the empty cell to the left. No checking for validity of the move.
@@ -57,7 +60,10 @@ public class BoardStateHandler {
 		char temp = GAMESTATE[row][col-1];
 		GAMESTATE[row][col]=temp;
 		GAMESTATE[row][col-1] = 'e';
-		empty--; //update empty 		
+		empty--; //update empty 
+		pathHistory.concat(String.valueOf(temp)); //update pathHistory
+		numMoves++;
+		
 	}
 	
 	//Method to modify the GAMESTATE by moving the empty cell to the right. No checking for validity of the move.
@@ -71,6 +77,8 @@ public class BoardStateHandler {
 		GAMESTATE[row][col]=temp;
 		GAMESTATE[row][col+1] = 'e';
 		empty++; //update empty 
+		pathHistory.concat(String.valueOf(temp)); //update pathHistory
+		numMoves++;
 	}
 	
 	//Method to modify the GAMESTATE by moving the empty cell up. No checking for validity of the move.
@@ -84,6 +92,8 @@ public class BoardStateHandler {
 		GAMESTATE[row][col]=temp;
 		GAMESTATE[row+1][col] = 'e';
 		empty = empty-5; //update empty 
+		pathHistory.concat(String.valueOf(temp)); //update pathHistory
+		numMoves++;
 	}
 	
 	//Method to modify the GAMESTATE by moving the empty cell down. No checking for validity of the move.
@@ -97,6 +107,8 @@ public class BoardStateHandler {
 		GAMESTATE[row][col]=temp;
 		GAMESTATE[row-1][col] = 'e';
 		empty = empty+5; //update empty 
+		pathHistory.concat(String.valueOf(temp)); //update pathHistory
+		numMoves++;
 	}
 		
 	//Method to return a String of GAMESTATE, likely used by ManualInput handler to eventually print to screen.
@@ -136,6 +148,7 @@ public class BoardStateHandler {
 	{
 		if(GoalStateChecker.isGoalState(GAMESTATE)) 
 		{
+			//TODO End Timer and update totalTime
 			Result r = new Result (pathHistory, totalTime);
 			
 			FileHandler.saveBoardResult(r); // NOTE: I think we are only passing a single result at the end.
