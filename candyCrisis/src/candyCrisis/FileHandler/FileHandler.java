@@ -1,8 +1,6 @@
 package candyCrisis.FileHandler;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -60,8 +58,7 @@ public class FileHandler
 				}
 				
 				counter = 0; //Reset for each line
-			}
-			
+			}	
 		}
 		catch (IOException e)
 		{
@@ -71,10 +68,33 @@ public class FileHandler
 		return results;	
 	}
 	
+	public static void saveBoardResult(Result result)
+	{
+		int boardCount = 0;
+		String boardName = "Board" + boardCount;
+		
+		//Get NIO Path
+		Path path = Paths.get(pathWrite + "Output_" + boardName + ".txt");
+		
+		byte[] pathHistoryBA = (result.getPathHistory() + System.lineSeparator()).getBytes();
+		byte[] totalTimeBA = (String.valueOf(result.getTotalTime()) + System.lineSeparator()).getBytes();
+		
+		try
+		{
+			Files.write(path, pathHistoryBA, StandardOpenOption.APPEND);
+			Files.write(path, totalTimeBA, StandardOpenOption.APPEND);	
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+	}
+	
 	//Static method for BoardStateHandler() to store the moves of a finished board.
 	//Input: Arraylist moveHistory, Arraylist totalTime
 	//Output: A text file that will store the array of moves, total completed time
-	public static void saveBoardResult(ArrayList<Result> boardHistory)
+	public static void saveBoardResultAL(ArrayList<Result> boardHistory)
 	{
 		int boardCount = 0;
 		String boardName = "Board" + boardCount;
@@ -124,11 +144,14 @@ public class FileHandler
 
 	public static void main(String[] args)
 	{
-		ArrayList<Result> boardHistory = new ArrayList<Result>();
-		boardHistory.add(new Result("GHMNOJ", 6));
-		boardHistory.add(new Result("NIDEJONIHCBG", 28));
-		boardHistory.add(new Result("HGBAFGLMNOJ", 8));
+		ArrayList<Result> boardHistoryAL = new ArrayList<Result>();
+		boardHistoryAL.add(new Result("GHMNOJ", 6));
+		boardHistoryAL.add(new Result("NIDEJONIHCBG", 28));
+		boardHistoryAL.add(new Result("HGBAFGLMNOJ", 8));
+		
+		Result boardHistory = new Result("GHMNOJ", 6);
 	
+		//saveBoardResultAL(boardHistoryAL);
 		saveBoardResult(boardHistory);
 		
 		//getStartBoard();
