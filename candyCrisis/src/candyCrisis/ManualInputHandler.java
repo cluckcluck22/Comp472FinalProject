@@ -13,6 +13,7 @@
 
 package candyCrisis;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -23,13 +24,14 @@ public class ManualInputHandler {
 	static
     {
 		mapA = new HashMap<String,Character>();
-		mapA.put("up", 'u');
-		mapA.put("down", 'd');
-		mapA.put("left", 'l');
-		mapA.put("right", 'r');
+		mapA.put("up", 'U');
+		mapA.put("down", 'D');
+		mapA.put("left", 'L');
+		mapA.put("right", 'R');
+		mapA.put("display", 'X');
     }
 	
-	public static void main( String[] args ) {
+	public static void main( String[] args ) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
         System.out.println( "Welcome to the CandyCrisis manual input method. The objective of the game is to "
         		+ "have the pieces of the game be symetrical over the middle row. To modify the following puzzle:");
         //TODO Display the puzzles current state to the user
@@ -46,12 +48,6 @@ public class ManualInputHandler {
         String line = reader.nextLine();
         while(!line.contentEquals("exit"))
         {
-        	if(line.contentEquals("display"))
-        	{
-        		//TODO print current game state to screen
-        	}
-        	else
-        	{
         		//Check for valid char
         		if(mapA.containsKey(line))
         		{
@@ -62,7 +58,6 @@ public class ManualInputHandler {
         		{
         			System.out.println("Invalid input "+line+" please enter a valid input");
         		}
-        	}
         	System.out.print("Please enter a command: ");
             line = reader.nextLine();
         }

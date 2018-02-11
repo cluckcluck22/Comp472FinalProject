@@ -14,19 +14,52 @@
  */
 package candyCrisis;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+
 public class InputInterface {
-	
-	public static boolean updateBoard(char item)
+	public static BoardStateHandler boardObj = new BoardStateHandler();
+	static
 	{
+		boardObj.begin();
+	}
+	public static Map<Character,Method> mapA;
+	static
+    {
+		try {
+		mapA = new HashMap<Character,Method>();
+		mapA.put('U', BoardStateHandler.class.getDeclaredMethod("moveUp"));
+		mapA.put('D', BoardStateHandler.class.getDeclaredMethod("moveDown"));
+		mapA.put('L', BoardStateHandler.class.getDeclaredMethod("moveLeft"));
+		mapA.put('R', BoardStateHandler.class.getDeclaredMethod("moveRight"));
+		mapA.put('X', BoardStateHandler.class.getDeclaredMethod("printCurrentBoard"));
+		} catch (NoSuchMethodException | SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+	public static boolean updateBoard(char item) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException
+	{
+		if(item == 'X')
+		{
+			(mapA.get(item)).invoke(boardObj);
+			return true;
+		}
+		else
+		{
 		//TODO check if input valid, fail and return false otherwise
+		//if(LegalActionChecker.isLegalAction(item))
 		if(true)
 		{
-			//Send command to board state to update it.
+			(mapA.get(item)).invoke(boardObj);
 			return true;
 		}
 		else
 		{
 			return false;
-		}		
+		}	
+		}
 	}
 }
