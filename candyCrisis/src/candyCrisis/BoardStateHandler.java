@@ -146,7 +146,7 @@ public class BoardStateHandler {
 	//create an object of type Result, based on the path history and total time, to be saved to file by the FileHandler
 	private void checkGoalState()
 	{
-		if(GoalStateChecker.isGoalState(GAMESTATE)) 
+		if(GoalStateChecker.isGoalState()) 
 		{
 			//TODO End Timer and update totalTime
 			Result r = new Result (pathHistory, totalTime);
