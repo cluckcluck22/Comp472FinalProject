@@ -37,14 +37,17 @@ public class BoardStateHandler {
 	public void begin()
 	{		
 		GAMESTATE = FileHandler.getStartBoard(); //Do I need to make a copy?
+		boolean foundEmpty=false;
+		
 		for(int row=0; row<numRow; row++) 
 		{
 			for(int col=0; col<numCol; col++) 
 			{
-				if(GAMESTATE[row][col]!='e') //so long as we have not found empty, increment empty
+				if(GAMESTATE[row][col]=='e') //so long as we have not found empty, increment empty
 				{
-					empty++;
+					foundEmpty=true;
 				}
+				else if(foundEmpty==false){empty++;}
 			}
 		}
 		//TODO Start Timer
@@ -88,9 +91,9 @@ public class BoardStateHandler {
 		int col = empty%5;
 		
 		//swap 'e' with the char above it
-		char temp = GAMESTATE[row+1][col];
+		char temp = GAMESTATE[row-1][col];
 		GAMESTATE[row][col]=temp;
-		GAMESTATE[row+1][col] = 'e';
+		GAMESTATE[row-1][col] = 'e';
 		empty = empty-5; //update empty 
 		pathHistory.concat(String.valueOf(temp)); //update pathHistory
 		numMoves++;
@@ -103,9 +106,9 @@ public class BoardStateHandler {
 		int col = empty%5;
 		
 		//swap 'e' with the char below it
-		char temp = GAMESTATE[row-1][col];
+		char temp = GAMESTATE[row+1][col];
 		GAMESTATE[row][col]=temp;
-		GAMESTATE[row-1][col] = 'e';
+		GAMESTATE[row+1][col] = 'e';
 		empty = empty+5; //update empty 
 		pathHistory.concat(String.valueOf(temp)); //update pathHistory
 		numMoves++;
