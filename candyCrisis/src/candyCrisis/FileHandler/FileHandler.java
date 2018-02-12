@@ -8,7 +8,6 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -73,7 +72,6 @@ public class FileHandler
 			//Each row in the text file = 1 char[][]
 			for(int i = 0; i < resultList.size(); i++)
 			{			
-				//System.out.println("Single board - getStartBoard() - " + i  + " started!");
 				char[][] board = new char[MAX_ROW][MAX_COLUMN];
 				
 				for(int m = 0; m < MAX_ROW; m++)
@@ -94,14 +92,10 @@ public class FileHandler
 						
 						//This is used to skip spaces in text file.
 						counter = counter + 2;
-						
-						//System.out.print(board[m][n]);
 					}
 					
 					//System.out.println();
 				}
-				
-				//System.out.println("Single board - getStartBoard() - " + i + " finished!" );
 				
 				//Add the char[][] to the arraylist of boards
 				boardsList.add(board);
@@ -145,19 +139,7 @@ public class FileHandler
 		if(itr.hasNext())
 		{
 			board = itr.next();
-			
-			/*System.out.println("Testing board - getNextBoard()");
-			
-			for(int m = 0; m < board.length; m++)
-			{
-				for(int n = 0; n < board[m].length; n++)
-				{
-					System.out.print(board[m][n]);				
-				}
-				
-				System.out.println();
-			}*/			
-			
+					
 			itr.remove();
 			hasNextBoard = itr.hasNext();			
 		}
@@ -187,8 +169,4 @@ public class FileHandler
 	{
 		return hasNextBoard;
 	}
-	
-	
-	
-	
 }
