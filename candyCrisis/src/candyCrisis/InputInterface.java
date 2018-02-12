@@ -25,6 +25,15 @@ public class InputInterface {
 	{
 		boardObj.begin();
 	}
+	public static Map<Character,Character> invert;
+	static
+	{
+		invert = new HashMap<Character,Character>();
+		invert.put('U','D');
+		invert.put('D', 'U');
+		invert.put('L', 'R');
+		invert.put('R','L');
+	}
 	public static Map<Character,Method> mapA;
 	static
     {
@@ -50,10 +59,11 @@ public class InputInterface {
 		else
 		{
 		//TODO check if input valid, fail and return false otherwise
-		//if(LegalActionChecker.isLegalAction(item))
-		if(true)
+		if(LegalActionChecker.isLegalAction(item))
+		//if(true)
 		{
 			(mapA.get(item)).invoke(boardObj);
+			boardObj.printCurrentBoard();
 			return true;
 		}
 		else
