@@ -2,6 +2,7 @@ package candyCrisis.FileHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import candyCrisis.Result;
 
 
 /*
@@ -12,20 +13,21 @@ public class FileHandlerTest
 {
 	public static void main(String[] args)
 	{
+		FileHandler obj1 = new FileHandler();
+		
 		//1. Test saving board history
 		/*ArrayList<Result> boardHistoryAL = new ArrayList<Result>();
 		boardHistoryAL.add(new Result("GHMNOJ", 6));
 		boardHistoryAL.add(new Result("NIDEJONIHCBG", 28));
 		boardHistoryAL.add(new Result("HGBAFGLMNOJ", 8));
-		
-		Result boardHistory = new Result("GHMNOJ", 6);*/
-	
-		//saveBoardResultAL(boardHistoryAL);
-		//saveBoardResult(boardHistory);
+		obj1.saveBoardResultAL(boardHistoryAL);*/
+			
+		/*Result boardHistory = new Result("GHMNOJ", 6);
+		obj1.saveBoardResult(boardHistory);*/
 		
 		//2. Test finding empty tile position
 		/*int[] emptyTileIndexTest = new int[3];
-		emptyTileIndexTest = getEmptyTileIndex();
+		emptyTileIndexTest = obj1.getEmptyTileIndex();
 		
 		for(int i = 0; i < emptyTileIndexTest.length; i++)
 		{
@@ -34,11 +36,10 @@ public class FileHandlerTest
 		
 		
 		//3. Test getting new boards
-		FileHandler obj1 = new FileHandler();
 		/*List<char[][]> boardsListTest = new ArrayList<char[][]>();
-		boardsListTest = obj1.getBoardsList();*/
+		boardsListTest = obj1.getBoardsList();
 			
-		/*for(int i = 0; i < boardsListTest.size(); i++)
+		for(int i = 0; i < boardsListTest.size(); i++)
 		{
 			char[][] testBoard = boardsListTest.get(i);
 			
@@ -55,5 +56,25 @@ public class FileHandlerTest
 				System.out.println();
 			}			
 		}*/
+		
+		//4. Get single board using hasNextBoard() and getNextBoard()		
+		while(obj1.hasNextBoard())
+		{
+			System.out.println("Has next board? -> " + obj1.hasNextBoard());
+			
+			char[][] testBoard2 = obj1.getNextBoard();
+			
+			for(int m = 0; m < testBoard2.length; m++)
+			{
+				for(int n = 0; n < testBoard2[m].length; n++)
+				{
+					System.out.print(testBoard2[m][n]);				
+				}
+				
+				System.out.println();
+			}		
+		}
+		
+		System.out.println("Has next board? -> " + obj1.hasNextBoard());
 	}
 }
