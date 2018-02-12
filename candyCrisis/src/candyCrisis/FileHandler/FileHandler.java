@@ -6,16 +6,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.ListIterator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import candyCrisis.Result;
 
 /* Class: FileHandler.java
- * Programmer: Jesse Tsang
+ * Programmer: Tsang Chi Kit (ID: 25692636)
  * Date: 5/2/2018
  * Description: This class will read the txt files that contain starting board information.
  * 	Then it will encode the board into a 2D multidimensional array and pass it to BoardStateHandler().
@@ -23,54 +23,89 @@ import candyCrisis.Result;
  */
 public class FileHandler
 {
-	private static final int MAX_ROW = 3;
-	private static final int MAX_COLUMN = 15;
-	private static final int NUM_OF_BOARD_PER_FILE = 3;
-	static char[][] results = new char[MAX_ROW][MAX_COLUMN];
+	private final static String ABS_PATH_READ = "src/Resources/Sample_Data.txt";
+	private final static String ABS_PATH_WRITE = "src/Resources/";
 	
-	private static final String ABS_PATH_READ = "src/Resources/Sample_Data.txt";
-	private static String pathWrite = "src/Resources/";
-	int outputCounter = 0;
+	private final static int MAX_ROW = 3;
+	private final static int MAX_COLUMN = 5;
+	private final static int NUM_OF_BOARD_PER_FILE = 3;
 	
-	private static int[] emptyTileIndex;
+	private char[][] board;
+	private List<char[][]> boardsList; //Arraylist of 3X5 boards.
+	
+	private int boardCount;
+	private int[] emptyTileIndex;
+	
+	private boolean hasNextBoard;
+	
+	//Constructor
+	public FileHandler()
+	{
+		this.boardCount = 0;
+		this.boardsList = new ArrayList<char[][]>();
+		this.emptyTileIndex = new int[NUM_OF_BOARD_PER_FILE];
+		
+		hasNextBoard = true;
+		
+		getStartBoard();
+	}
 	
 	//Static method for BoardStateHandler() to get starting board from a txt file.
 	//Input: None
-	//Output: 2D array of character. 
-	public static char[][] getStartBoard()
+	//Output: ArrayList of char[][]. 
+	private List<char[][]> getStartBoard()
 	{
 		//Get NIO Path
 		Path path = Paths.get(ABS_PATH_READ);
-	
-		List<String> resultList = new ArrayList<>();
-		emptyTileIndex = new int[NUM_OF_BOARD_PER_FILE];
 			
+		//Read txt file
 		try (Stream<String> stream = Files.lines(path))
 		{
+			List<String> resultList = new ArrayList<>();
+			
 			//Convert the stream to an array list.
-			//Each line would be 1 array.
+			//Each line would be 1 char[][].
 			resultList = stream
 							.collect(Collectors.toList());
 			
 			int counter = 0; //Counter to skip spaces
-					
-			for (int i = 0; i < MAX_ROW; i++)
-			{
-				for (int j = 0; j < MAX_COLUMN; j++)
+			
+			//Each row in the text file = 1 char[][]
+			for(int i = 0; i < resultList.size(); i++)
+			{			
+				//System.out.println("Single board - getStartBoard() - " + i  + " started!");
+				char[][] board = new char[MAX_ROW][MAX_COLUMN];
+				
+				for(int m = 0; m < MAX_ROW; m++)
 				{
-					results[i][j] = resultList.get(i).charAt(counter);
-					
-					char isEmpty = results[i][j];
-									
-					if(isEmpty == 'e')
+					for(int n = 0; n < MAX_COLUMN; n++)
 					{
-						emptyTileIndex[i] = j;
-						//System.out.println("Found Empty: " + isEmpty + " at row " + i + " and column " + emptyTileIndex.get(i) + ".");
+						board[m][n] = resultList.get(i).charAt(counter);
+						
+						//Check if the tile is an empty tile
+						char isEmpty = board[m][n];
+						
+						//If yes, write it to emptyTileIndex array
+						if(isEmpty == 'e')
+						{
+							emptyTileIndex[i] = n;
+							//System.out.println("Found Empty: " + isEmpty + " at row " + i + " and column " + emptyTileIndex.get(i) + ".");
+						}
+						
+						//This is used to skip spaces in text file.
+						counter = counter + 2;
+						
+						//System.out.print(board[m][n]);
 					}
-
-					counter = counter + 2;
+					
+					//System.out.println();
 				}
 				
+				//System.out.println("Single board - getStartBoard() - " + i + " finished!" );
+				
+				//Add the char[][] to the arraylist of boards
+				boardsList.add(board);
+										
 				counter = 0; //Reset for each line
 			}	
 		}
@@ -78,17 +113,16 @@ public class FileHandler
 		{
 			e.printStackTrace();
 		}
-		
-		return results;	
-	}
 	
-	public static void saveBoardResult(Result result)
+		return boardsList;	
+	}
+
+	public void saveBoardResult(Result result)
 	{
-		int boardCount = 0;
 		String boardName = "Board" + boardCount;
 		
 		//Get NIO Path
-		Path path = Paths.get(pathWrite + "Output_" + boardName + ".txt");
+		Path path = Paths.get(ABS_PATH_WRITE + "Output_" + boardName + ".txt");
 		
 		byte[] pathHistoryBA = (result.getPathHistory() + System.lineSeparator()).getBytes();
 		byte[] totalTimeBA = (String.valueOf(result.getTotalTime()) + System.lineSeparator()).getBytes();
@@ -100,67 +134,61 @@ public class FileHandler
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
 	}
 	
-	//Static method for BoardStateHandler() to store the moves of a finished board.
-	//Input: Arraylist moveHistory, Arraylist totalTime
-	//Output: A text file that will store the array of moves, total completed time
-	public static void saveBoardResultAL(ArrayList<Result> boardHistory)
+	public char[][] getNextBoard()
 	{
-		int boardCount = 0;
-		String boardName = "Board" + boardCount;
-			
-		try
-		{
-			//Get NIO Path
-			Path path = Paths.get(pathWrite + "Output_" + boardName + ".txt");
-			
-			for (Result r : boardHistory)
-			{
-				byte[] pathHistoryBA = (r.getPathHistory() + System.lineSeparator()).getBytes();
-				byte[] totalTimeBA = (String.valueOf(r.getTotalTime()) + System.lineSeparator()).getBytes();
-						
-				Files.write(path, pathHistoryBA, StandardOpenOption.APPEND);
-				Files.write(path, totalTimeBA, StandardOpenOption.APPEND);		
-			}		
-		}
-		catch(IOException e)
-		{
-			e.printStackTrace();
-		}
+		Iterator<char[][]> itr = boardsList.iterator();
 		
-		System.out.println("Board history saved to " + boardName + ".txt");
+		if(itr.hasNext())
+		{
+			board = itr.next();
+			
+			/*System.out.println("Testing board - getNextBoard()");
+			
+			for(int m = 0; m < board.length; m++)
+			{
+				for(int n = 0; n < board[m].length; n++)
+				{
+					System.out.print(board[m][n]);				
+				}
+				
+				System.out.println();
+			}*/			
+			
+			itr.remove();
+			hasNextBoard = itr.hasNext();			
+		}
+		else
+		{
+			hasNextBoard = false;
+			
+			board = null;
+		}
+
+		return board;
 	}
 	
-	//Return a map of empty tile index <row, column> position.
-	public static int[] getEmptyTileIndex()
+	//Return an array of empty tile position ordered by their board number.
+	public int[] getEmptyTileIndex()
 	{
 		return emptyTileIndex;
 	}
-
-	public static void main(String[] args)
-	{
-		ArrayList<Result> boardHistoryAL = new ArrayList<Result>();
-		boardHistoryAL.add(new Result("GHMNOJ", 6));
-		boardHistoryAL.add(new Result("NIDEJONIHCBG", 28));
-		boardHistoryAL.add(new Result("HGBAFGLMNOJ", 8));
-		
-		Result boardHistory = new Result("GHMNOJ", 6);
 	
-		//saveBoardResultAL(boardHistoryAL);
-		//saveBoardResult(boardHistory);
-		
-		getStartBoard();
-		
-		int[] emptyTileIndexTest = new int[3];
-		emptyTileIndexTest = getEmptyTileIndex();
-		
-		for(int i = 0; i < emptyTileIndexTest.length; i++)
-		{
-			System.out.println("Empty at Row: " + i + " and Column: " + emptyTileIndexTest[i]);
-		}	
+	//Return list of char[][] (ArrayList)
+	public List<char[][]> getBoardsList()
+	{		
+		return boardsList;
 	}
+
+	public boolean hasNextBoard()
+	{
+		return hasNextBoard;
+	}
+	
+	
+	
+	
 }
