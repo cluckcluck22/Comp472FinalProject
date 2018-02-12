@@ -13,10 +13,10 @@ import java.util.stream.Stream;
 
 import candyCrisis.Result;
 
-/* Class: FileHandler.java
- * Programmer: Tsang Chi Kit (ID: 25692636)
- * Date: 5/2/2018
- * Description: This class will read the txt files that contain starting board information.
+/*  Class Title: FileHandler.java
+ *  Author: Tsang Chi Kit (ID: 25692636)
+ *  Date: 5/2/2018
+ *  Description: This class will read the txt files that contain starting board information.
  * 	Then it will encode the board into a 2D multidimensional array and pass it to BoardStateHandler().
  * 	After a game is finish, this class will also handle the given state history and encode it to a txt file.
  */
@@ -49,7 +49,7 @@ public class FileHandler
 		getStartBoard();
 	}
 	
-	//Static method for BoardStateHandler() to get starting board from a txt file.
+	//Method to import boards into an arraylist.
 	//Input: None
 	//Output: ArrayList of char[][]. 
 	private List<char[][]> getStartBoard()
@@ -111,6 +111,9 @@ public class FileHandler
 		return boardsList;	
 	}
 
+	//Method for store board history (path history and total game time) into a text file.
+	//Input: Result data structure (String str, int i)
+	//Output: A Output_Board.txt file in /Resources folder.
 	public void saveBoardResult(Result result)
 	{
 		String boardName = "Board" + boardCount;
@@ -129,9 +132,14 @@ public class FileHandler
 		catch (IOException e)
 		{
 			e.printStackTrace();
-		}	
+		}
+		
+		boardCount++;
 	}
 	
+	//Method for BoardStateHandler class to retreive a char[][] (a board state).
+	//Input: None
+	//Output: char[][] (size = 3 rows 5 columns)
 	public char[][] getNextBoard()
 	{
 		Iterator<char[][]> itr = boardsList.iterator();
@@ -153,18 +161,26 @@ public class FileHandler
 		return board;
 	}
 	
-	//Return an array of empty tile position ordered by their board number.
+	//Method for BoardStateHandler class to retreive all the empty tiles positions.
+	//Input: None
+	//Output: int[] where index = board#, index_value = empty tile position (0 - 14) 
 	public int[] getEmptyTileIndex()
 	{
 		return emptyTileIndex;
 	}
 	
-	//Return list of char[][] (ArrayList)
+	//Getter method to retreive the arraylist that contains all the boards that are extracted from txt file.
+	//Input: None
+	//Output: List<char[][]> 
 	public List<char[][]> getBoardsList()
 	{		
 		return boardsList;
 	}
 
+	//Boolean method to tell if there is board available, use in conjunction with getNextBoard(). 
+	//This method will check the iterator of boardsList is empty or not.
+	//Input: None
+	//Output: Boolean value of hasNextBoard() 
 	public boolean hasNextBoard()
 	{
 		return hasNextBoard;
