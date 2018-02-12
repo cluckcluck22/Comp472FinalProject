@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.Collectors;
@@ -22,23 +23,29 @@ import candyCrisis.Result;
  */
 public class FileHandler
 {
+	private final static String ABS_PATH_READ = "src/Resources/Sample_Data.txt";
+	private final static String ABS_PATH_WRITE = "src/Resources/";
+	
 	private final static int MAX_ROW = 3;
 	private final static int MAX_COLUMN = 5;
 	private final static int NUM_OF_BOARD_PER_FILE = 3;
-	private char[][] board = new char[MAX_ROW][MAX_COLUMN];  //Each board would be a char[][]
-	private List<char[][]> boardsList = new ArrayList<char[][]>(); //Arraylist of 3X5 boards.
 	
-	private static final String ABS_PATH_READ = "src/Resources/Sample_Data.txt";
-	private static final String ABS_PATH_WRITE = "src/Resources/";
+	private char[][] board;
+	private List<char[][]> boardsList; //Arraylist of 3X5 boards.
 	
 	private int boardCount;
 	private int[] emptyTileIndex;
 	
+	private boolean hasNextBoard;
 	
+	//Constructor
 	public FileHandler()
 	{
 		this.boardCount = 0;
+		this.boardsList = new ArrayList<char[][]>();
 		this.emptyTileIndex = new int[NUM_OF_BOARD_PER_FILE];
+		
+		hasNextBoard = true;
 		
 		getStartBoard();
 	}
@@ -66,7 +73,8 @@ public class FileHandler
 			//Each row in the text file = 1 char[][]
 			for(int i = 0; i < resultList.size(); i++)
 			{			
-				System.out.println("Adding board - getStartBoard() - " + i  + " started!");
+				//System.out.println("Single board - getStartBoard() - " + i  + " started!");
+				char[][] board = new char[MAX_ROW][MAX_COLUMN];
 				
 				for(int m = 0; m < MAX_ROW; m++)
 				{
@@ -87,36 +95,16 @@ public class FileHandler
 						//This is used to skip spaces in text file.
 						counter = counter + 2;
 						
-						System.out.print(board[m][n]);
+						//System.out.print(board[m][n]);
 					}
 					
-					System.out.println();
+					//System.out.println();
 				}
 				
-				System.out.println("Adding board - getStartBoard() - " + i + " finished!" );
+				//System.out.println("Single board - getStartBoard() - " + i + " finished!" );
 				
 				//Add the char[][] to the arraylist of boards
 				boardsList.add(board);
-				
-				List<char[][]> boardsListTest = boardsList;
-				
-				for(int x = 0; x < boardsListTest.size(); x++)
-				{
-					char[][] testBoard = boardsListTest.get(x);
-					
-					System.out.println("Board size:" + boardsListTest.size());
-					System.out.println("Testing board - after add to boardList - " + x);
-					
-					for(int m = 0; m < testBoard.length; m++)
-					{
-						for(int n = 0; n < testBoard[x].length; n++)
-						{
-							System.out.print(testBoard[m][n]);				
-						}
-						
-						System.out.println();
-					}			
-				}
 										
 				counter = 0; //Reset for each line
 			}	
@@ -125,27 +113,7 @@ public class FileHandler
 		{
 			e.printStackTrace();
 		}
-		
-		/*List<char[][]> boardsListTest = boardsList;
-		
-		for(int i = 0; i < boardsListTest.size(); i++)
-		{
-			char[][] testBoard = boardsListTest.get(i);
-			
-			System.out.println("Board size:" + boardsListTest.size());
-			System.out.println("Testing board - before return - " + i);
-			
-			for(int m = 0; m < testBoard.length; m++)
-			{
-				for(int n = 0; n < testBoard[i].length; n++)
-				{
-					System.out.print(testBoard[m][n]);				
-				}
-				
-				System.out.println();
-			}			
-		}*/
-		
+	
 		return boardsList;	
 	}
 
@@ -170,6 +138,39 @@ public class FileHandler
 		}	
 	}
 	
+	public char[][] getNextBoard()
+	{
+		Iterator<char[][]> itr = boardsList.iterator();
+		
+		if(itr.hasNext())
+		{
+			board = itr.next();
+			
+			/*System.out.println("Testing board - getNextBoard()");
+			
+			for(int m = 0; m < board.length; m++)
+			{
+				for(int n = 0; n < board[m].length; n++)
+				{
+					System.out.print(board[m][n]);				
+				}
+				
+				System.out.println();
+			}*/			
+			
+			itr.remove();
+			hasNextBoard = itr.hasNext();			
+		}
+		else
+		{
+			hasNextBoard = false;
+			
+			board = null;
+		}
+
+		return board;
+	}
+	
 	//Return an array of empty tile position ordered by their board number.
 	public int[] getEmptyTileIndex()
 	{
@@ -181,4 +182,13 @@ public class FileHandler
 	{		
 		return boardsList;
 	}
+
+	public boolean hasNextBoard()
+	{
+		return hasNextBoard;
+	}
+	
+	
+	
+	
 }
