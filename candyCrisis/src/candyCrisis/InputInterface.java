@@ -51,16 +51,14 @@ public class InputInterface {
     }
 	public static boolean updateBoard(char item) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException
 	{
-		if(item == 'X')
+		if(item == 'X')		//User is asking for display
 		{
 			(mapA.get(item)).invoke(boardObj);
 			return true;
 		}
 		else
 		{
-		//TODO check if input valid, fail and return false otherwise
 		if(LegalActionChecker.isLegalAction(item))
-		//if(true)
 		{
 			(mapA.get(item)).invoke(boardObj);
 			boardObj.printCurrentBoard();
