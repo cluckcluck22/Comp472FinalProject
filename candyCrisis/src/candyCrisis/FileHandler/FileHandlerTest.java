@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import candyCrisis.Result;
 
-
 /*
  * Note: Test 3 - Test getting new boards - NOT WORKING!!
  * Problem: boardsList in FileHandler is only 
