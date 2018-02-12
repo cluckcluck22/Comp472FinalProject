@@ -70,4 +70,8 @@ public class InputInterface {
 		}	
 		}
 	}
+	public static void endGame()
+	{
+		boardObj.checkGoalState();
+	}
 }

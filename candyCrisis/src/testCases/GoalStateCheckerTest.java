@@ -17,6 +17,7 @@ public class GoalStateCheckerTest {
 		InputInterface.updateBoard('R');
 		InputInterface.updateBoard('D');
 		InputInterface.updateBoard('R');
+		InputInterface.updateBoard('R');
 		InputInterface.updateBoard('U');
 		assertEquals(true,GoalStateChecker.isGoalState());
 	}

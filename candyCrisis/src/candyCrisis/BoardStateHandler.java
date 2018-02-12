@@ -149,7 +149,7 @@ public class BoardStateHandler {
 		
 	//Method to check if GAMESTATE is in a goal state, using a call to GoalStateChecker. If so, the function will
 	//create an object of type Result, based on the path history and total time, to be saved to file by the FileHandler
-	private void checkGoalState()
+	public void checkGoalState()
 	{
 		if(GoalStateChecker.isGoalState()) 
 		{
