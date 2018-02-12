@@ -6,7 +6,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,11 +25,14 @@ public class FileHandler
 {
 	private static final int MAX_ROW = 3;
 	private static final int MAX_COLUMN = 15;
+	private static final int NUM_OF_BOARD_PER_FILE = 3;
 	static char[][] results = new char[MAX_ROW][MAX_COLUMN];
 	
 	private static final String ABS_PATH_READ = "src/Resources/Sample_Data.txt";
 	private static String pathWrite = "src/Resources/";
 	int outputCounter = 0;
+	
+	private static int[] emptyTileIndex;
 	
 	//Static method for BoardStateHandler() to get starting board from a txt file.
 	//Input: None
@@ -38,6 +43,7 @@ public class FileHandler
 		Path path = Paths.get(ABS_PATH_READ);
 	
 		List<String> resultList = new ArrayList<>();
+		emptyTileIndex = new int[NUM_OF_BOARD_PER_FILE];
 			
 		try (Stream<String> stream = Files.lines(path))
 		{
@@ -52,7 +58,15 @@ public class FileHandler
 			{
 				for (int j = 0; j < MAX_COLUMN; j++)
 				{
-					results[i][j] = resultList.get(i).charAt(counter);									
+					results[i][j] = resultList.get(i).charAt(counter);
+					
+					char isEmpty = results[i][j];
+									
+					if(isEmpty == 'e')
+					{
+						emptyTileIndex[i] = j;
+						//System.out.println("Found Empty: " + isEmpty + " at row " + i + " and column " + emptyTileIndex.get(i) + ".");
+					}
 
 					counter = counter + 2;
 				}
@@ -121,25 +135,10 @@ public class FileHandler
 		System.out.println("Board history saved to " + boardName + ".txt");
 	}
 	
-	//Method for testing purpose.
-	private static char[][] getDummyArray()
+	//Return a map of empty tile index <row, column> position.
+	public static int[] getEmptyTileIndex()
 	{
-		//Dummy response (for testing)
-		String[] inputList = {"rebwrbbbrrrbrbw", "brbwwrrbbbbrerr", "rrbbrwbrrrwbebb"};
-		
-		for (int i = 0; i < MAX_ROW; i++)
-		{
-			for (int j = 0; j < MAX_COLUMN; j++)
-			{
-				results[i][j] = inputList[i].charAt(j);
-				
-				System.out.print(results[i][j]);
-			}
-			
-			System.out.println("");
-		}
-			
-		return results;	
+		return emptyTileIndex;
 	}
 
 	public static void main(String[] args)
@@ -152,8 +151,16 @@ public class FileHandler
 		Result boardHistory = new Result("GHMNOJ", 6);
 	
 		//saveBoardResultAL(boardHistoryAL);
-		saveBoardResult(boardHistory);
+		//saveBoardResult(boardHistory);
 		
-		//getStartBoard();
+		getStartBoard();
+		
+		int[] emptyTileIndexTest = new int[3];
+		emptyTileIndexTest = getEmptyTileIndex();
+		
+		for(int i = 0; i < emptyTileIndexTest.length; i++)
+		{
+			System.out.println("Empty at Row: " + i + " and Column: " + emptyTileIndexTest[i]);
+		}	
 	}
 }
