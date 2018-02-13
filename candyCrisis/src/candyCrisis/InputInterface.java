@@ -49,6 +49,21 @@ public class InputInterface {
 			e.printStackTrace();
 		}
     }
+	
+	public static boolean startNext()
+	{
+		boardObj.checkGoalState();
+		if(boardObj.hasNextBoard())
+		{
+			boardObj.begin();
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	public static boolean updateBoard(char item) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException
 	{
 		if(item == 'X')		//User is asking for display
@@ -69,9 +84,5 @@ public class InputInterface {
 			return false;
 		}	
 		}
-	}
-	public static void endGame()
-	{
-		boardObj.checkGoalState();
 	}
 }

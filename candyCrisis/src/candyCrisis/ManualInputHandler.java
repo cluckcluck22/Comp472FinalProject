@@ -57,9 +57,11 @@ public class ManualInputHandler {
         				System.out.println("Board Updated");
         				if(GoalStateChecker.isGoalState())
         				{
-        					System.out.println("Final Board State Reached");
-        					InputInterface.endGame();
-        					break;
+        					if(!InputInterface.startNext())
+        					{
+        						System.out.println("Final Board State Reached");
+        						break;
+        					}
         				}
         				else
         				{

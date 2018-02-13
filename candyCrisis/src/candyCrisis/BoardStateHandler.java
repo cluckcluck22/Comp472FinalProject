@@ -35,6 +35,11 @@ public class BoardStateHandler {
 		filer = new FileHandler();
 	}
 	
+	public boolean hasNextBoard()
+	{
+		return filer.hasNextBoard();
+	}
+	
 	//Method to setup the initial GAMESTATE, using a call to the FileHandler. This also sets int empty to the correct location.
 	public void begin()
 	{		
