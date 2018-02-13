@@ -25,6 +25,15 @@ public class InputInterface {
 	{
 		boardObj.begin();
 	}
+	public static Map<Character,Character> invert;
+	static
+	{
+		invert = new HashMap<Character,Character>();
+		invert.put('U','D');
+		invert.put('D', 'U');
+		invert.put('L', 'R');
+		invert.put('R','L');
+	}
 	public static Map<Character,Method> mapA;
 	static
     {
@@ -42,18 +51,17 @@ public class InputInterface {
     }
 	public static boolean updateBoard(char item) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException
 	{
-		if(item == 'X')
+		if(item == 'X')		//User is asking for display
 		{
 			(mapA.get(item)).invoke(boardObj);
 			return true;
 		}
 		else
 		{
-		//TODO check if input valid, fail and return false otherwise
-		//if(LegalActionChecker.isLegalAction(item))
-		if(true)
+		if(LegalActionChecker.isLegalAction(item))
 		{
 			(mapA.get(item)).invoke(boardObj);
+			boardObj.printCurrentBoard();
 			return true;
 		}
 		else
@@ -61,5 +69,9 @@ public class InputInterface {
 			return false;
 		}	
 		}
+	}
+	public static void endGame()
+	{
+		boardObj.checkGoalState();
 	}
 }

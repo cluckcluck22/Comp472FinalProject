@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class BoardStateHandler {
 
 	public static char[][] GAMESTATE;
+	private FileHandler filer;
 	
 	private int empty;
 	private int numRow = 3;//hard-coded, because it will always be this size
@@ -31,12 +32,13 @@ public class BoardStateHandler {
 		numMoves = 0;
 		pathHistory = "";
 		totalTime=0.0f;
+		filer = new FileHandler();
 	}
 	
 	//Method to setup the initial GAMESTATE, using a call to the FileHandler. This also sets int empty to the correct location.
 	public void begin()
 	{		
-		GAMESTATE = FileHandler.getStartBoard(); //Do I need to make a copy?
+		GAMESTATE = filer.getNextBoard();// .getStartBoard(); //Do I need to make a copy?
 		boolean foundEmpty=false;
 		
 		for(int row=0; row<numRow; row++) 
@@ -147,14 +149,15 @@ public class BoardStateHandler {
 		
 	//Method to check if GAMESTATE is in a goal state, using a call to GoalStateChecker. If so, the function will
 	//create an object of type Result, based on the path history and total time, to be saved to file by the FileHandler
-	private void checkGoalState()
+	public void checkGoalState()
 	{
 		if(GoalStateChecker.isGoalState()) 
 		{
 			//TODO End Timer and update totalTime
 			Result r = new Result (pathHistory, totalTime);
 			
-			FileHandler.saveBoardResult(r); // NOTE: I think we are only passing a single result at the end.
+			filer.saveBoardResult(r);
+			//FileHandler.saveBoardResult(r); // NOTE: I think we are only passing a single result at the end.
 		}
 	}
 }

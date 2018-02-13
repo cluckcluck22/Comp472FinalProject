@@ -39,7 +39,7 @@ public class ManualInputHandler {
         System.out.println("left");
         System.out.println("right");
         System.out.println("down");
-        System.out.println("up");
+        System.out.println("up");	
         System.out.println("display");
         System.out.println("exit");
         
@@ -52,7 +52,24 @@ public class ManualInputHandler {
         		if(mapA.containsKey(line))
         		{
         			System.out.println("Valid move "+line+ " received");
-        			InputInterface.updateBoard(mapA.get(line));
+        			if(InputInterface.updateBoard(mapA.get(line)))
+        			{
+        				System.out.println("Board Updated");
+        				if(GoalStateChecker.isGoalState())
+        				{
+        					System.out.println("Final Board State Reached");
+        					InputInterface.endGame();
+        					break;
+        				}
+        				else
+        				{
+        					System.out.println("Non Final State");
+        				}
+        			}
+        			else
+        			{
+        				System.out.println("Invalid move: Out of bounds");
+        			}
         		}
         		else
         		{
