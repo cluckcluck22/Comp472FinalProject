@@ -6,7 +6,7 @@ package candyCrisis;
  * keeps the game history, number of moves done so far, and time. After every move, the boardStateHandler
  * will make a call to the GoalStateChecker to check if the board is in a goal state.
  * 
- * TODO: Timer functionality & Test cases
+ * TODO: Test cases
  */
 
 import candyCrisis.FileHandler.FileHandler;
@@ -22,7 +22,8 @@ public class BoardStateHandler {
 	private int numRow = 3;//hard-coded, because it will always be this size
 	private int numCol = 5;//hard-coded, because it will always be this size
 	private String pathHistory;
-	private float totalTime;
+	private long totalTime;
+	private long startTime;
 	private int numMoves;
 	
 	public BoardStateHandler() 
@@ -31,7 +32,7 @@ public class BoardStateHandler {
 		empty = 0;//default empty location is 0, which is equivalent to A
 		numMoves = 0;
 		pathHistory = "";
-		totalTime=0.0f;
+		totalTime=0;
 		filer = new FileHandler();
 	}
 	
@@ -43,7 +44,7 @@ public class BoardStateHandler {
 	//Method to setup the initial GAMESTATE, using a call to the FileHandler. This also sets int empty to the correct location.
 	public void begin()
 	{		
-		GAMESTATE = filer.getNextBoard();// .getStartBoard(); //Do I need to make a copy?
+		GAMESTATE = filer.getNextBoard();// .getStartBoard();
 		boolean foundEmpty=false;
 		
 		for(int row=0; row<numRow; row++) 
@@ -57,7 +58,7 @@ public class BoardStateHandler {
 				else if(foundEmpty==false){empty++;}
 			}
 		}
-		//TODO Start Timer
+		startTime= System.nanoTime(); // System.currentTimeMillis() is less accurate but faster
 	}
 	
 	//Method to modify the GAMESTATE by moving the empty cell to the left. No checking for validity of the move.
@@ -158,7 +159,10 @@ public class BoardStateHandler {
 	{
 		if(GoalStateChecker.isGoalState()) 
 		{
-			//TODO End Timer and update totalTime
+			long endTime = System.nanoTime();
+			
+			totalTime = endTime-startTime;
+			
 			Result r = new Result (pathHistory, totalTime);
 			
 			filer.saveBoardResult(r);
