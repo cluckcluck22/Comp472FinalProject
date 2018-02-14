@@ -126,6 +126,11 @@ public class FileHandler
 		
 		try
 		{
+			if(!Files.exists(path))
+			{
+				Files.createFile(path);
+			}
+			
 			Files.write(path, pathHistoryBA, StandardOpenOption.APPEND);
 			Files.write(path, totalTimeBA, StandardOpenOption.APPEND);	
 		}

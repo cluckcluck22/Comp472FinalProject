@@ -46,6 +46,9 @@ public class BoardStateHandler {
 	{		
 		GAMESTATE = filer.getNextBoard();// .getStartBoard();
 		boolean foundEmpty=false;
+		empty = 0;
+		pathHistory = "";
+		numMoves=0;
 		
 		for(int row=0; row<numRow; row++) 
 		{
