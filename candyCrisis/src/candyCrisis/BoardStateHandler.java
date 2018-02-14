@@ -64,15 +64,15 @@ public class BoardStateHandler {
 	//Method to modify the GAMESTATE by moving the empty cell to the left. No checking for validity of the move.
 	public void moveLeft() 
 	{
-		int	row = empty/5;
-		int col = empty%5;
+		int	row = empty/numCol;
+		int col = empty%numCol;
 		
 		//swap 'e' with the char to the left of it
 		char temp = GAMESTATE[row][col-1];
 		GAMESTATE[row][col]=temp;
 		GAMESTATE[row][col-1] = 'e';
 		empty--; //update empty 
-		pathHistory.concat(String.valueOf(temp)); //update pathHistory
+		pathHistory= pathHistory.concat(String.valueOf((char)(empty+65))); //update pathHistory based on move made
 		numMoves++;
 		
 	}
@@ -80,45 +80,45 @@ public class BoardStateHandler {
 	//Method to modify the GAMESTATE by moving the empty cell to the right. No checking for validity of the move.
 	public void moveRight() 
 	{
-		int	row = empty/5;
-		int col = empty%5;
+		int	row = empty/numCol;
+		int col = empty%numCol;
 		
 		//swap 'e' with the char to the right of it
 		char temp = GAMESTATE[row][col+1];
 		GAMESTATE[row][col]=temp;
 		GAMESTATE[row][col+1] = 'e';
 		empty++; //update empty 
-		pathHistory.concat(String.valueOf(temp)); //update pathHistory
+		pathHistory= pathHistory.concat(String.valueOf((char)(empty+65))); //update pathHistory based on move made
 		numMoves++;
 	}
 	
 	//Method to modify the GAMESTATE by moving the empty cell up. No checking for validity of the move.
 	public void moveUp() 
 	{
-		int	row = empty/5;
-		int col = empty%5;
+		int	row = empty/numCol;
+		int col = empty%numCol;
 		
 		//swap 'e' with the char above it
 		char temp = GAMESTATE[row-1][col];
 		GAMESTATE[row][col]=temp;
 		GAMESTATE[row-1][col] = 'e';
-		empty = empty-5; //update empty 
-		pathHistory.concat(String.valueOf(temp)); //update pathHistory
+		empty = empty-numCol; //update empty 
+		pathHistory= pathHistory.concat(String.valueOf((char)(empty+65))); //update pathHistory based on move made
 		numMoves++;
 	}
 	
 	//Method to modify the GAMESTATE by moving the empty cell down. No checking for validity of the move.
 	public void moveDown() 
 	{
-		int	row = empty/5;
-		int col = empty%5;
+		int	row = empty/numCol;
+		int col = empty%numCol;
 		
 		//swap 'e' with the char below it
 		char temp = GAMESTATE[row+1][col];
 		GAMESTATE[row][col]=temp;
 		GAMESTATE[row+1][col] = 'e';
-		empty = empty+5; //update empty 
-		pathHistory.concat(String.valueOf(temp)); //update pathHistory
+		empty = empty+numCol; //update empty 
+		pathHistory= pathHistory.concat(String.valueOf((char)(empty+65))); //update pathHistory based on move made
 		numMoves++;
 	}
 		
