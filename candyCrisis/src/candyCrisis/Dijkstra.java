@@ -22,13 +22,24 @@ public class Dijkstra {
 	public int iterations = 0;
 	public boolean debug = true;
 	
+	
+	/* Constructor: Dijkstra
+	 * Paramaters: None
+	 * Description: A default constructor for Dijkstra, might be needed to instantiate the open and closed list
+	 */
 	public Dijkstra()
 	{
 
 	}
 	
-	
-	public List<String> runDikstra(String startNode)
+	/* Function: runDikstra
+	 * Paramaters:
+	 * 	@String startNode: A 15 character single line representation of the board state
+	 * Returns:
+	 * 	@ List<String>: A list of 15 character board states that is the path from the start to the goal.
+	 * Description: A function that runs the Dijkstra algorithm until all paths lead to no goal or the shortest path to a goal node is reached.
+	 */
+	public List<String> runDijkstra(String startNode)
 	{
 		openList.add(new Node(startNode,0,0));
 		
@@ -38,74 +49,114 @@ public class Dijkstra {
 			Node current = openList.remove(0);
 			if(false)		//if(isFinalState(current.name) == true)
 			{
-				//Generate Path
 				return getPath(current.name,startNode);
-				//Return Path
 			}
+			
 			if(debug)
 			{
 				debugger();
 			}
 			
+			//Get all successors to the current state, will be between two and four
+			//String[] connected = generateSuccessor States
 			String[] connected = null;
+			
+			//loop through connections
 			for(int i = 0; i < connected.length; i++)
 			{
 				String element  = connected[i];
 				
+				//check if node already found and on open list
 				if(containsName(openList,element))
 				{
 					Node openElement = getElementWithName(openList,element).get();
+					//check if current path cost is less than path cost of node on open list
 					if(openElement.cost > current.cost + 1)
 					{
+						//update path cost
 						openElement.cost = current.cost + 1;
-						updateReferenceTable(element,current.name);
 						//update reference table
+						updateReferenceTable(element,current.name);
+						
 					}
 				}
+				//check if node already been processed and on closed list
 				else if(containsName(closedList,element))
 				{
 					Node closedElement = getElementWithName(closedList,element).get();
+					//check if cost to node on closed list is greater than the current path cost
 					if(closedElement.cost > current.cost + 1 )
 					{
+						//remove from closed and reinsert to open with new path cost
 						deleteElementWithName(closedList,element);
 						sortedAdd(openList,element,current.cost + 1,0);
-						updateReferenceTable(element,current.name);
 						//update reference table
+						updateReferenceTable(element,current.name);
 					}
 				}
 				else
 				{
-					//push to open list
+					//push to open list as it has not already been seen
 					sortedAdd(openList,element,current.cost + 1, 0);
 					updateReferenceTable(element,current.name);
 					//update reference table
 					
 				}
-				//check if closed contains
-				//check if open contains
-				//else push to open
 			}
 		}
 		
-		//TODO remove this once complete or update so it is reached when no goal reached
+		//TODO remove this once complete or update as it is reached when no goal reached
 		return null;
 	}
 	
+	/* Function: containsName
+	 * Params:
+	 * 	@ final List<Node> list: list to check for containing name
+	 * 	@ final String name: name to check if in list
+	 * Returns:
+	 * 	@ boolean: state of the list containing the name in the node name field
+	 * Description: A function that filters the node list for elements that contain the passed name. Filters for the first node and checks if there was
+	 * 	any to confirm existence
+	 * TODO:
+	 * 1)Check if contains name works on empty list
+	 */
 	public boolean containsName(final List<Node> list, final String name){
 	    return list.stream().filter(o -> o.name.equals(name)).findFirst().isPresent();
 	}
+	
+	/* Function getElementWithName
+	 * Params:
+	 * 	@ final List<Node> list: list to get element from
+	 * 	@ final String name: name of the node to get from the list
+	 * Returns:
+	 * 	@ Optional<Node>: returns the node if it is possible to get. Run only after using containsName to confirm existence.
+	 * Description: A function that gets the first node with the name tag on the passed list. Optional since the method to fetch can find nothing.
+	 * 	Should only be run after running containsName to confirm existence of such an element
+	 */
 	public Optional<Node> getElementWithName(final List<Node> list, final String name){
 	    return list.stream().filter(o -> o.name.equals(name)).findFirst();
 	}
+	
+	/* Function deleteElementWithName
+	 * Params:
+	 * 	@ final List<Node> list: the list to delete the element from
+	 * 	@ final String name: the name element of the node to delete from
+	 * Description: A function that finds the element with the name and deletes it
+	 * 
+	 */
 	public void deleteElementWithName(final List<Node> list, final String name)
 	{
 		list.remove(list.stream().filter(o -> o.name.equals(name)).findFirst().get());
 	}
 	
 	/* Function: sortedAdd
-	 * Programmer: Eric Davies
-	 * Date: 5/3/2018
-	 * Description: A function that adds elements into a sorted list in order to maintain an increasing order
+	 * Params:
+	 * 	@ List<Node> list: list to add a new node to
+	 * 	@ String name: name of the new node
+	 *  @ String cost: actual cost to get to the current node
+	 *  @ String heuristic: estimated cost to get to the new node
+	 * Description: A function that inserts nodes into a sorted list in the first position from the left that is greater than the passed cost
+	 * 	value. This maintains the sorted lists order and allows the smallest cost node to be easily found
 	 */
 	public void sortedAdd(List<Node> list, String name,int cost,int heuristic)
 	{
@@ -118,6 +169,10 @@ public class Dijkstra {
 		}
 	}
 	
+	/* Function: debugger
+	 * Description: A function that prints out the contents of the closed and open list. Useful for the testing of the Dijkstra looping is
+	 * 	functioning properly
+	 */
 	private void debugger()
 	{
 		System.out.println("Debugger Called");
@@ -126,6 +181,12 @@ public class Dijkstra {
 		System.out.println("Closed List Contents");
 		printList(closedList);
 	}
+	
+	/* Function: printList
+	 * Params:
+	 * 	@ List<Node> list: list to print
+	 * Description: A function that loops over a node list and outputs a human readable list to the console instead.
+	 */
 	private void printList(List<Node> list)
 	{
 		String output = "";
@@ -137,11 +198,25 @@ public class Dijkstra {
 		System.out.println(output);
 	}
 	
-	
+	/* Function: updateReferenceTable
+	 * Params:
+	 * 	@ String child: name of the child node entry to update
+	 * 	@ String parent: name of the parent node to be set as the value in the referenceTable
+	 * Description: A function that inserts/updates the entry with the key child and value parent
+	 */
 	public void updateReferenceTable(String child,String parent)
 	{
 		referenceTable.put(child, parent);
 	}
+	
+	/* Function getPath
+	 * Params:
+	 * 	@ String goal: the end node to start getting the path from
+	 * 	@ String start: the start node that signifies the start of the path
+	 * Returns:
+	 * 	@ List<String>: A list of every state from the end state to the start state
+	 * Description: A function that loops until it has fetched the complete path from the reference table
+	 */
 	public List<String> getPath(String goal,String start)
 	{
 		List<String> path = null;

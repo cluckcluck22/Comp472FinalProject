@@ -1,3 +1,9 @@
+/* Class: Node.java
+ * Programmer: Eric Davies
+ * Date: 6/3/2018
+ * Description: A class that stores the name, cost and heuristic cost into an easily referencible object for the Dijkstra algorithm.
+ */
+
 package candyCrisis;
 
 public class Node {
