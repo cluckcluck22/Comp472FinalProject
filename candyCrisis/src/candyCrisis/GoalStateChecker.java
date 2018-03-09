@@ -14,4 +14,15 @@ public class GoalStateChecker {
 		return true;
 	}
 	
+	public static boolean isGoalStateAi(String state) {
+		
+		for(int i=0; i<5; i++){
+			if(state.charAt(i)!=state.charAt(i+10))
+				return false;
+		}
+		
+		return true;
+	
+	}
+	
 }
