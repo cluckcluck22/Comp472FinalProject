@@ -51,9 +51,9 @@ public class AIManager
 			
 			boardString = fileHandler.getNextBoardString();
 			
-			//String resultPath = getResultString(solver.runDijkstra(boardString));
+			String resultPath = getResultString(solver.runDijkstra(boardString));
 			
-			String resultPath = "GHMNOJ";							//For testing only!!
+			//String resultPath = "GHMNOJ";							//For testing only!!
 			
 			long endTime = System.nanoTime();
 			
