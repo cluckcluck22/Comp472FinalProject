@@ -131,7 +131,8 @@ public class FileHandler
 		Path path = Paths.get(ABS_PATH_WRITE + "Output_" + boardName + ".txt");
 		
 		byte[] pathHistoryBA = (result.getPathHistory() + System.lineSeparator()).getBytes();
-		byte[] totalTimeBA = (String.valueOf(result.getTotalTime()) + System.lineSeparator()).getBytes();
+		float resultMilleSec = (result.getTotalTime()/1000000);
+		byte[] totalTimeBA = (String.valueOf(resultMilleSec + "ms") + System.lineSeparator()).getBytes();
 		
 		try
 		{
