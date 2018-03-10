@@ -11,7 +11,7 @@ public class AIManager
 	private Dijkstra solver;
 	private FileHandler fileHandler;
 	
-	private long startTime, totalTime;
+	private long startBoardTime, totalBoardTime, totalGameTime;
 	
 	//Constructor
 	public AIManager()
@@ -20,7 +20,7 @@ public class AIManager
 		this.fileHandler = new FileHandler();
 		
 		//Start counting total time for solving a puzzle.
-		this.startTime = System.nanoTime();
+		this.startBoardTime = System.nanoTime();
 		
 		startAI();
 	}
@@ -35,22 +35,40 @@ public class AIManager
 		String boardString = "";
 		
 		//Check if there is a board available ...
-		hasNextBoardString = fileHandler.hasNextBoard();
+		hasNextBoardString = fileHandler.hasNextBoardString();
 				
 		//While available ... do
+		//1. Start timer
+		//2. Get board string
+		//3. Pass board string to Dijkstra.runDijkstra()
+		//4. Get List<String> as resultPath
+		//5. Stop timer
+		//6. Pass resultPath to FileHandler
+		//7. Repeat 
 		while(hasNextBoardString)
 		{
+			startBoardTime = System.nanoTime();					
+			
 			boardString = fileHandler.getNextBoardString();
+			
 			String resultPath = getResultString(solver.runDijkstra(boardString));
+			
+			//String resultPath = "GHMNOJ";							//For testing only!!
 			
 			long endTime = System.nanoTime();
 			
-			totalTime = startTime - endTime;
+			totalBoardTime = endTime - startBoardTime;
+			totalGameTime = totalGameTime + totalBoardTime;
 			
-			Result result = new Result(resultPath, totalTime); 
+			Result result = new Result(resultPath, totalBoardTime); 
 			
 			fileHandler.saveBoardResult(result);
-		}		
+			
+			//Restart process
+			hasNextBoardString = fileHandler.hasNextBoardString();
+		}
+		
+		System.out.println("All boards solved!! Total time is: " + (float)(totalGameTime/1000000) + "ms");
 	}
 
 	private String getResultString(List<String> result)
