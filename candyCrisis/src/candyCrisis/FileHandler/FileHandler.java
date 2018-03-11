@@ -29,13 +29,17 @@ public class FileHandler
 	private final static int MAX_COLUMN = 5;
 	private final static int NUM_OF_BOARD_PER_FILE = 3;
 	
-	private char[][] board;
-	private List<char[][]> boardsList; //Arraylist of 3X5 boards.
+	private char[][] board;					//To store a 3X5 board in 2D array form.
+	private List<char[][]> boardsList; 		//Arraylist of 3X5 boards.
+	
+	private String boardString;				//To store a board in string form (for Dijkstra class).
+	private List<String> boardsStringList;	//To store an array of strings(boardString).
 	
 	private int boardCount;
-	private int[] emptyTileIndex;
+	private int[] emptyTileIndex;			//To store the position of the empty tile
 	
-	private boolean hasNextBoard;
+	private boolean hasNextBoard;			//A boolean that check if there exist another board in the text file
+	private boolean hasNextBoardString;		//A boolean that check if there exist another board string in the text file
 	
 	//Constructor
 	public FileHandler()
@@ -43,16 +47,19 @@ public class FileHandler
 		this.boardCount = 0;
 		this.boardsList = new ArrayList<char[][]>();
 		this.emptyTileIndex = new int[NUM_OF_BOARD_PER_FILE];
+		this.boardString = "";
+		this.boardsStringList = new ArrayList<String>();
 		
 		hasNextBoard = true;
+		hasNextBoardString = true;
 		
 		getStartBoard();
 	}
 	
 	//Method to import boards into an arraylist.
-	//Input: None
-	//Output: ArrayList of char[][]. 
-	private List<char[][]> getStartBoard()
+	//Input: None.
+	//Output: None. 
+	private void getStartBoard()
 	{
 		//Get NIO Path
 		Path path = Paths.get(ABS_PATH_READ);
@@ -64,15 +71,15 @@ public class FileHandler
 			
 			//Convert the stream to an array list.
 			//Each line would be 1 char[][].
-			resultList = stream
-							.collect(Collectors.toList());
+			resultList = stream.collect(Collectors.toList());
 			
 			int counter = 0; //Counter to skip spaces
 			
-			//Each row in the text file = 1 char[][]
+			//Each row in the text file = 1 char[][] (1 row = 1 board)
 			for(int i = 0; i < resultList.size(); i++)
 			{			
-				char[][] board = new char[MAX_ROW][MAX_COLUMN];
+				board = new char[MAX_ROW][MAX_COLUMN];
+				boardString = "";
 				
 				for(int m = 0; m < MAX_ROW; m++)
 				{
@@ -87,18 +94,22 @@ public class FileHandler
 						if(isEmpty == 'e')
 						{
 							emptyTileIndex[i] = n;
-							//System.out.println("Found Empty: " + isEmpty + " at row " + i + " and column " + emptyTileIndex.get(i) + ".");
+							//System.out.println("Found Empty: " + isEmpty + " at row " + i + " and column " + emptyTileIndex[i] + ".");
 						}
+						
+						//Append the char to the boardString
+						boardString = boardString + board[m][n]; 
 						
 						//This is used to skip spaces in text file.
 						counter = counter + 2;
-					}
-					
-					//System.out.println();
+					}		
 				}
-				
+								
 				//Add the char[][] to the arraylist of boards
 				boardsList.add(board);
+				
+				//Add the boardString (board in String form) into boardStringList
+				boardsStringList.add(boardString);
 										
 				counter = 0; //Reset for each line
 			}	
@@ -106,9 +117,7 @@ public class FileHandler
 		catch (IOException e)
 		{
 			e.printStackTrace();
-		}
-	
-		return boardsList;	
+		};	
 	}
 
 	//Method for store board history (path history and total game time) into a text file.
@@ -122,7 +131,8 @@ public class FileHandler
 		Path path = Paths.get(ABS_PATH_WRITE + "Output_" + boardName + ".txt");
 		
 		byte[] pathHistoryBA = (result.getPathHistory() + System.lineSeparator()).getBytes();
-		byte[] totalTimeBA = (String.valueOf(result.getTotalTime()) + System.lineSeparator()).getBytes();
+		float resultMilleSec = (result.getTotalTime()/1000000);
+		byte[] totalTimeBA = (String.valueOf(resultMilleSec + "ms") + System.lineSeparator()).getBytes();
 		
 		try
 		{
@@ -139,7 +149,7 @@ public class FileHandler
 			e.printStackTrace();
 		}
 		
-		boardCount++;
+		//boardCount++;
 	}
 	
 	//Method for BoardStateHandler class to retreive a char[][] (a board state).
@@ -166,6 +176,31 @@ public class FileHandler
 		return board;
 	}
 	
+	//Method for BoardStateHandler class to retreive a char[][] (a board state).
+	//Input: None
+	//Output: String (a board in string form, size = 15)
+	public String getNextBoardString()
+	{
+		Iterator<String> itr = boardsStringList.iterator();
+		String result = "";
+		
+		if(itr.hasNext())
+		{
+			result = itr.next();
+					
+			itr.remove();
+			hasNextBoardString = itr.hasNext();			
+		}
+		else
+		{
+			hasNextBoardString = false;
+			
+			boardString = null;
+		}
+
+		return result;
+	}	
+	
 	//Method for BoardStateHandler class to retreive all the empty tiles positions.
 	//Input: None
 	//Output: int[] where index = board#, index_value = empty tile position (0 - 14) 
@@ -181,6 +216,14 @@ public class FileHandler
 	{		
 		return boardsList;
 	}
+	
+	//Getter method to retreive the arraylist that contains all the boards that are extracted from txt file.
+	//Input: None
+	//Output: List<char[][]> 
+	public List<String> getBoardsStringList()
+	{		
+		return boardsStringList;
+	}	
 
 	//Boolean method to tell if there is board available, use in conjunction with getNextBoard(). 
 	//This method will check the iterator of boardsList is empty or not.
@@ -190,4 +233,13 @@ public class FileHandler
 	{
 		return hasNextBoard;
 	}
+	
+	//Boolean method to tell if there is a board string available, use in conjunction with getNextBoardString(). 
+	//This method will check the iterator of boardsStringList is empty or not.
+	//Input: None
+	//Output: Boolean value of hasNextBoardString() 
+	public boolean hasNextBoardString()
+	{
+		return hasNextBoardString;
+	}	
 }
