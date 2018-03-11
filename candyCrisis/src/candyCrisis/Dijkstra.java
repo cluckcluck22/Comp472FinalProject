@@ -9,6 +9,7 @@
 
 package candyCrisis;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,7 @@ public class Dijkstra {
 	List<Node> openList,closedList;
 	Map<String, String> referenceTable = new HashMap<String, String>();
 	
-	public int testing = 10;
+	public int testing = 3;
 	public int iterations = 0;
 	public boolean debug = true;
 	
@@ -29,7 +30,8 @@ public class Dijkstra {
 	 */
 	public Dijkstra()
 	{
-
+		openList = new ArrayList<Node>();
+		closedList = new ArrayList<Node>();
 	}
 	
 	/* Function: runDikstra
@@ -47,6 +49,7 @@ public class Dijkstra {
 		{
 			iterations ++;
 			Node current = openList.remove(0);
+			
 			if(false)		//if(isFinalState(current.name) == true)
 			{
 				return getPath(current.name,startNode);
@@ -59,12 +62,12 @@ public class Dijkstra {
 			
 			//Get all successors to the current state, will be between two and four
 			//String[] connected = generateSuccessor States
-			String[] connected = null;
+			List<String> connected = GenerateSuccessor.getSuccessors(current.name);
 			
 			//loop through connections
-			for(int i = 0; i < connected.length; i++)
+			for(int i = 0; i < connected.size(); i++)
 			{
-				String element  = connected[i];
+				String element  = connected.get(i);
 				
 				//check if node already found and on open list
 				if(containsName(openList,element))
@@ -103,6 +106,7 @@ public class Dijkstra {
 					
 				}
 			}
+			sortedAdd(closedList,current);
 		}
 		
 		//TODO remove this once complete or update as it is reached when no goal reached
@@ -165,9 +169,25 @@ public class Dijkstra {
 			if(list.get(i).cost> cost)
 			{
 				list.add(i,new Node(name,cost,heuristic));
+				return;
 			}
 		}
+		list.add(new Node(name,cost,heuristic));
 	}
+	
+	public void sortedAdd(List<Node> list, Node current)
+	{
+		for(int i = 0; i < list.size(); i ++)
+		{
+			if(list.get(i).cost> current.cost)
+			{
+				list.add(i,current);
+				return;
+			}
+		}
+		list.add(current);
+	}	
+	
 	
 	/* Function: debugger
 	 * Description: A function that prints out the contents of the closed and open list. Useful for the testing of the Dijkstra looping is
