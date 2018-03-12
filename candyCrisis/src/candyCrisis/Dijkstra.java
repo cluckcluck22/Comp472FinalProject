@@ -3,7 +3,6 @@
  * Date: 5/3/2018
  * Description: A class that stores the dijkstra function to search through the puzzle search space
  * TODO:
- * Remove all suggestion comments
  * Solve all TODO's in the code block
  */
 
@@ -16,17 +15,20 @@ import java.util.Map;
 import java.util.Optional;
 
 public class Dijkstra {
+	
 	List<Node> openList,closedList;
 	Map<String, String> referenceTable;
 	
+	/*************Testing Data*******************/
 	public int testing = 10000;
 	public int iterations = 0;
 	public boolean debug = false;
+	/*************Testing Data End**************/
 	
 	
 	/* Constructor: Dijkstra
 	 * Paramaters: None
-	 * Description: A default constructor for Dijkstra, might be needed to instantiate the open and closed list
+	 * Description: A default constructor that does nothing
 	 */
 	public Dijkstra()
 	{
@@ -34,7 +36,7 @@ public class Dijkstra {
 	}
 	
 	/* Function: runDikstra
-	 * Paramaters:
+	 * Parameters:
 	 * 	@String startNode: A 15 character single line representation of the board state
 	 * Returns:
 	 * 	@ List<String>: A list of 15 character board states that is the path from the start to the goal.
@@ -42,10 +44,15 @@ public class Dijkstra {
 	 */
 	public List<String> runDijkstra(String startNode)
 	{
-		iterations = 0;
+		iterations = 0;		//TODO remove iteration as this is for loops testing purposes and now holds no true use
+		
+		//Set and reset list for every call
 		openList = new ArrayList<Node>();
 		closedList = new ArrayList<Node>();
 		referenceTable = new HashMap<String, String>();
+		//*********************************
+		
+		
 		openList.add(new Node(startNode,0,0));
 		updateReferenceTable(startNode,startNode);
 		
@@ -54,7 +61,8 @@ public class Dijkstra {
 			iterations ++;
 			Node current = openList.remove(0);
 			
-			if(GoalStateChecker.isGoalStateAi(current.name))		//if(isFinalState(current.name) == true)
+			//check if goal state found
+			if(GoalStateChecker.isGoalStateAi(current.name))
 			{
 				System.out.println("Goal State Reached");
 				return getPath(current.name,startNode);
@@ -66,7 +74,6 @@ public class Dijkstra {
 			}
 			
 			//Get all successors to the current state, will be between two and four
-			//String[] connected = generateSuccessor States
 			List<String> connected = GenerateSuccessor.getSuccessors(current.name);
 			
 			//loop through connections
@@ -115,7 +122,7 @@ public class Dijkstra {
 		}
 		
 		//TODO remove this once complete or update as it is reached when no goal reached
-		return null;
+		return new ArrayList<String>();
 	}
 	
 	/* Function: containsName
@@ -126,8 +133,6 @@ public class Dijkstra {
 	 * 	@ boolean: state of the list containing the name in the node name field
 	 * Description: A function that filters the node list for elements that contain the passed name. Filters for the first node and checks if there was
 	 * 	any to confirm existence
-	 * TODO:
-	 * 1)Check if contains name works on empty list
 	 */
 	public boolean containsName(final List<Node> list, final String name){
 	    return list.stream().filter(o -> o.name.equals(name)).findFirst().isPresent();
@@ -180,6 +185,14 @@ public class Dijkstra {
 		list.add(new Node(name,cost,heuristic));
 	}
 	
+	/* Function sortedAdd
+	 * Params:
+	 * 	@ List<Node> list: list to add a node to
+	 * 	@ Node: node to add into the sorted list
+	 * Description: A function that inserts an existing node into a sorted list at the first position from the left that the node is greater than.
+	 * 	This allows for the list to stay in a sorted state
+	 * 
+	 */
 	public void sortedAdd(List<Node> list, Node current)
 	{
 		for(int i = 0; i < list.size(); i ++)
@@ -246,10 +259,11 @@ public class Dijkstra {
 	{
 		List<String> path = new ArrayList<String>();
 		String item = goal;
+		path.add(0,goal);
 		while(true)
 		{
 			item =referenceTable.get(item);
-			path.add(item);
+			path.add(0,item);
 			if(item.equals(start))
 			{
 				return path;

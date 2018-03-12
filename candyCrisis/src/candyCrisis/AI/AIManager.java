@@ -72,15 +72,27 @@ public class AIManager
 		System.out.println("All boards solved!! Total time is: " + (float)(totalGameTime/1000000) + "ms");
 	}
 
+	/* Function: getResultsString
+	 * Date: 12/3/2018
+	 * Description: A function that takes in the state list from the Dijkstra Algorithm and finds the path the empty state takes through the board state
+	 */
 	private String getResultString(List<String> result)
 	{
 		String resultString = "";
 		
 		for (String s : result)
 		{
-			resultString = resultString + s;
+			char[] arr =  s.toCharArray();
+			for(int i = 0; i < 15; i ++)
+			{
+				//On finding the e element
+				if(arr[i] == 'e')
+				{
+					resultString += (char)('A' + (i));
+				}
+			}
 		}
-		
+		System.out.print(resultString);
 		return resultString;
 	}
 }
