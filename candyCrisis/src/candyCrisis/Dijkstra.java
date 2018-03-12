@@ -17,11 +17,11 @@ import java.util.Optional;
 
 public class Dijkstra {
 	List<Node> openList,closedList;
-	Map<String, String> referenceTable = new HashMap<String, String>();
+	Map<String, String> referenceTable;
 	
-	public int testing = 3;
+	public int testing = 10000;
 	public int iterations = 0;
-	public boolean debug = true;
+	public boolean debug = false;
 	
 	
 	/* Constructor: Dijkstra
@@ -30,8 +30,7 @@ public class Dijkstra {
 	 */
 	public Dijkstra()
 	{
-		openList = new ArrayList<Node>();
-		closedList = new ArrayList<Node>();
+		
 	}
 	
 	/* Function: runDikstra
@@ -43,15 +42,21 @@ public class Dijkstra {
 	 */
 	public List<String> runDijkstra(String startNode)
 	{
+		iterations = 0;
+		openList = new ArrayList<Node>();
+		closedList = new ArrayList<Node>();
+		referenceTable = new HashMap<String, String>();
 		openList.add(new Node(startNode,0,0));
+		updateReferenceTable(startNode,startNode);
 		
 		while(openList.size() > 0 && iterations < testing)
 		{
 			iterations ++;
 			Node current = openList.remove(0);
 			
-			if(false)		//if(isFinalState(current.name) == true)
+			if(GoalStateChecker.isGoalStateAi(current.name))		//if(isFinalState(current.name) == true)
 			{
+				System.out.println("Goal State Reached");
 				return getPath(current.name,startNode);
 			}
 			
@@ -239,10 +244,11 @@ public class Dijkstra {
 	 */
 	public List<String> getPath(String goal,String start)
 	{
-		List<String> path = null;
+		List<String> path = new ArrayList<String>();
+		String item = goal;
 		while(true)
 		{
-			String item =referenceTable.get(goal);
+			item =referenceTable.get(item);
 			path.add(item);
 			if(item.equals(start))
 			{

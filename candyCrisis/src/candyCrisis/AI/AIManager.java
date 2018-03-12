@@ -66,6 +66,7 @@ public class AIManager
 			
 			//Restart process
 			hasNextBoardString = fileHandler.hasNextBoardString();
+			System.out.println("run Done");
 		}
 		
 		System.out.println("All boards solved!! Total time is: " + (float)(totalGameTime/1000000) + "ms");
