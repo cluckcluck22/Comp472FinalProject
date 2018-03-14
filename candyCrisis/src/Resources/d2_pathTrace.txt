@@ -1,0 +1,147 @@
+//Solving 1st puzzle
+
+A B C D E
+F G H I J
+K L M N O
+
+r e b w r
+b b b r r 
+r b r b w
+
+r b b w r
+b e b r r 
+r b r b w
+
+r b b w r
+b b e r r 
+r b r b w
+
+r b b w r
+b b r r r 
+r b e b w
+
+r b b w r
+b b r r r 
+r b b e w
+
+r b b w r
+b b r r e 
+r b b w r
+
+solution path: BGHMNOJ
+
+
+//Solving 2nd puzzle
+A B C D E
+F G H I J
+K L M N O
+
+b r b w w 
+r r b b b 
+b r e r r
+
+b r b w w 
+r r e b b 
+b r b r r
+
+b r b w w 
+r r b e b 
+b r b r r
+
+b r b e w 
+r r b w b 
+b r b r r
+
+b r e b w 
+r r b w b 
+b r b r r
+
+b r b b w 
+r r e w b 
+b r b r r
+
+b r b b w 
+r r w e b 
+b r b r r
+
+b r b b w 
+r r w r b 
+b r b e r
+
+b r b b w 
+r r w r b 
+b r b r e
+
+b r b b w 
+r r w r e 
+b r b r b
+
+b r b b e 
+r r w r w 
+b r b r b
+
+b r b e b 
+r r w r w 
+b r b r b
+
+b r b r b 
+r r w e w 
+b r b r b
+
+solution path: MHIDCHINOJEDI
+
+
+//Solving 3rd puzzle
+A B C D E
+F G H I J
+K L M N O
+
+r r b b r 
+w b r r r 
+w b e b b
+
+r r b b r 
+w b e r r 
+w b r b b
+
+r r b b r 
+w e b r r 
+w b r b b
+
+r e b b r 
+w r b r r 
+w b r b b
+
+e r b b r 
+w r b r r 
+w b r b b
+
+w r b b r 
+e r b r r 
+w b r b b
+
+w r b b r 
+r e b r r 
+w b r b b
+
+w r b b r 
+r b b r r 
+w e r b b
+
+w r b b r 
+r b b r r 
+w r e b b
+
+w r b b r 
+r b b r r 
+w r b e b
+
+w r b b r 
+r b b r r 
+w r b b e
+
+w r b b r 
+r b b r e 
+w r b b r
+
+solution path: MHGBAFGLMNOJ
