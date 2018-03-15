@@ -16,11 +16,13 @@ public class AIManager
 	//Constructor
 	public AIManager()
 	{
+		//Start counting total time for solving a puzzle.
+		this.startBoardTime = System.nanoTime();
+		
 		this.solver = new Dijkstra();
 		this.fileHandler = new FileHandler();
 		
-		//Start counting total time for solving a puzzle.
-		this.startBoardTime = System.nanoTime();
+		
 		
 		startAI();
 	}
@@ -52,9 +54,8 @@ public class AIManager
 			boardString = fileHandler.getNextBoardString();
 			
 			String resultPath = getResultString(solver.runDijkstra(boardString));
-			
-			//String resultPath = "GHMNOJ";							//For testing only!!
-			
+			System.out.println("\niterations");
+			System.out.println(solver.iterations);			
 			long endTime = System.nanoTime();
 			
 			totalBoardTime = endTime - startBoardTime;

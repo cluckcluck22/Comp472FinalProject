@@ -53,7 +53,7 @@ public class Dijkstra {
 		//*********************************
 		
 		
-		openList.add(new Node(startNode,0,0));
+		openList.add(new Node(startNode,0,heuristicManager.evaluateHeuristic("")));
 		updateReferenceTable(startNode,startNode);
 		
 		while(openList.size() > 0 && iterations < testing)
@@ -104,7 +104,7 @@ public class Dijkstra {
 					{
 						//remove from closed and reinsert to open with new path cost
 						deleteElementWithName(closedList,element);
-						sortedAdd(openList,element,current.cost + 1,0);
+						sortedAdd(openList,element,current.cost + 1,heuristicManager.evaluateHeuristic(""));
 						//update reference table
 						updateReferenceTable(element,current.name);
 					}
@@ -112,7 +112,7 @@ public class Dijkstra {
 				else
 				{
 					//push to open list as it has not already been seen
-					sortedAdd(openList,element,current.cost + 1, 0);
+					sortedAdd(openList,element,current.cost + 1,heuristicManager.evaluateHeuristic(""));
 					updateReferenceTable(element,current.name);
 					//update reference table
 					
