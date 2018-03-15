@@ -24,4 +24,8 @@ public class Node {
 		heuristicCost = passedHeuristic;
 	}
 
+	public int getCost()
+	{
+		return cost + heuristicCost;
+	}
 }

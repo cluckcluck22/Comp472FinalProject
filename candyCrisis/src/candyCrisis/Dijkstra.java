@@ -86,7 +86,7 @@ public class Dijkstra {
 				{
 					Node openElement = getElementWithName(openList,element).get();
 					//check if current path cost is less than path cost of node on open list
-					if(openElement.cost > current.cost + 1)
+					if(openElement.getCost() > current.getCost() + 1)
 					{
 						//update path cost
 						openElement.cost = current.cost + 1;
@@ -100,7 +100,7 @@ public class Dijkstra {
 				{
 					Node closedElement = getElementWithName(closedList,element).get();
 					//check if cost to node on closed list is greater than the current path cost
-					if(closedElement.cost > current.cost + 1 )
+					if(closedElement.getCost() > current.getCost() + 1 )
 					{
 						//remove from closed and reinsert to open with new path cost
 						deleteElementWithName(closedList,element);
@@ -176,7 +176,7 @@ public class Dijkstra {
 	{
 		for(int i = 0; i < list.size(); i ++)
 		{
-			if(list.get(i).cost> cost)
+			if(list.get(i).getCost()> cost + heuristic)
 			{
 				list.add(i,new Node(name,cost,heuristic));
 				return;
@@ -197,7 +197,7 @@ public class Dijkstra {
 	{
 		for(int i = 0; i < list.size(); i ++)
 		{
-			if(list.get(i).cost> current.cost)
+			if(list.get(i).getCost()> current.getCost())
 			{
 				list.add(i,current);
 				return;
