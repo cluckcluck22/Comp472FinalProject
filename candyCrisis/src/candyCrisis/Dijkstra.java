@@ -15,9 +15,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import listStorage.listManagers;
+
 public class Dijkstra {
 
-	List<Node> openList, closedList;
+	//List<Node> openList, closedList;
 	Map<String, String> referenceTable;
 
 	/************* Testing Data *******************/
@@ -51,17 +53,18 @@ public class Dijkstra {
 						// purposes and now holds no true use
 
 		// Set and reset list for every call
-		openList = new ArrayList<Node>();
-		closedList = new ArrayList<Node>();
+		//openList = new ArrayList<Node>();
+		//closedList = new ArrayList<Node>();
+		listManagers manage = new listManagers(startNode);
 		referenceTable = new HashMap<String, String>();
 		// *********************************
 
-		openList.add(new Node(startNode, 0, heuristicManager.evaluateHeuristic("")));
+		manage.insertOpenList(startNode, 0, heuristicManager.evaluateHeuristic(startNode),"");
 		updateReferenceTable(startNode, startNode);
 
-		while (openList.size() > 0 && iterations < testing) {
+		while (manage.openListHasNext() && iterations < testing) {
 			iterations++;
-			Node current = openList.remove(0);
+			Node current = manage.openListGetFirst();
 
 			// check if goal state found
 			if (GoalStateChecker.isGoalStateAi(current.name)) {
@@ -75,20 +78,22 @@ public class Dijkstra {
 
 			// Get all successors to the current state, will be between two and
 			// four
-			List<String> connected = GenerateSuccessor.getSuccessors(current.name);
+			List<String> connected = GenerateSuccessor.getSuccessors(current.name,current.parent);
 
 			// loop through connections
 			for (int i = 0; i < connected.size(); i++) {
 				String element = connected.get(i);
 
 				// check if node already found and on open list
-				Node openElement = containsName(openList, element);
+				Node openElement = manage.getNodeFromOpenListExistence(element);
 				if (openElement != null) {
 					// check if current path cost is less than path cost of node
 					// on open list
 					if (openElement.getCost() > current.getCost() + 1) {
 						// update path cost
+						//TODO test this works correctly
 						openElement.cost = current.cost + 1;
+						manage.updateOpenlist(element, openElement.cost,current.name);
 						// update reference table
 						updateReferenceTable(element, current.name);
 
@@ -96,7 +101,7 @@ public class Dijkstra {
 				}
 				// check if node already been processed and on closed list
 				else {
-					Node closedElement = containsName(closedList, element);
+					Node closedElement = manage.getNodeFromClosedListExistence(element);
 					if (closedElement != null) {
 						
 						// check if cost to node on closed list is greater than
@@ -104,21 +109,21 @@ public class Dijkstra {
 						if (closedElement.getCost() > current.getCost() + 1) {
 							// remove from closed and reinsert to open with new
 							// path cost
-							deleteElementWithName(closedList, element);
-							sortedAdd(openList, element, current.cost + 1, heuristicManager.evaluateHeuristic(""));
+							manage.closedListRemove(closedElement.name);
+							manage.insertOpenList(element, current.cost + 1, heuristicManager.evaluateHeuristic(element),current.name);
 							// update reference table
 							updateReferenceTable(element, current.name);
 						}
 					} else {
 						// push to open list as it has not already been seen
-						sortedAdd(openList, element, current.cost + 1, heuristicManager.evaluateHeuristic(""));
+						manage.insertOpenList(element, current.cost + 1, heuristicManager.evaluateHeuristic(element),current.name);
 						updateReferenceTable(element, current.name);
 						// update reference table
 
 					}
 				}
 			}
-			listAdd(closedList, current);
+			manage.insertClosedList(current);
 		}
 
 		// TODO remove this once complete or update as it is reached when no
@@ -191,14 +196,14 @@ public class Dijkstra {
 	 * the left that is greater than the passed cost value. This maintains the
 	 * sorted lists order and allows the smallest cost node to be easily found
 	 */
-	public void sortedAdd(List<Node> list, String name, int cost, int heuristic) {
+	public void sortedAdd(List<Node> list, String name, int cost, int heuristic,String parent) {
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).getCost() > cost + heuristic) {
-				list.add(i, new Node(name, cost, heuristic));
+				list.add(i, new Node(name, cost, heuristic,parent));
 				return;
 			}
 		}
-		list.add(new Node(name, cost, heuristic));
+		list.add(new Node(name, cost, heuristic,parent));
 	}
 
 	/*
@@ -234,9 +239,9 @@ public class Dijkstra {
 	private void debugger() {
 		System.out.println("Debugger Called");
 		System.out.println("Open List Contents");
-		printList(openList);
+		//printList(openList);
 		System.out.println("Closed List Contents");
-		printList(closedList);
+		//printList(closedList);
 	}
 
 	/*

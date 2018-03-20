@@ -11,17 +11,20 @@ public class Node {
 	public int cost;
 	public int heuristicCost;
 	
+	public String parent;
+	
 	public Node()
 	{
 		name = "";
 		cost = 0;
 		heuristicCost = 0;
 	}
-	public Node(String passedName, int passedCost, int passedHeuristic)
+	public Node(String passedName, int passedCost, int passedHeuristic,String parent)
 	{
 		name = passedName;
 		cost = passedCost;
 		heuristicCost = passedHeuristic;
+		this.parent = parent;
 	}
 
 	public int getCost()
