@@ -11,6 +11,6 @@ public class heuristicManager {
 	{
 		
 		//TODO remove after testing
-		return 0;
+		return SymmetryMatch.getSymmetryMatch1(node);
 	}
 }
