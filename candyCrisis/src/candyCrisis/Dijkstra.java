@@ -21,7 +21,7 @@ public class Dijkstra {
 	Map<String, String> referenceTable;
 
 	/************* Testing Data *******************/
-	public int testing = 10000;
+	public int testing = 100000;
 	public int iterations = 0;
 	public boolean debug = false;
 
@@ -56,7 +56,7 @@ public class Dijkstra {
 		referenceTable = new HashMap<String, String>();
 		// *********************************
 
-		openList.add(new Node(startNode, 0, heuristicManager.evaluateHeuristic("")));
+		openList.add(new Node(startNode, 0, heuristicManager.evaluateHeuristic(startNode)));
 		updateReferenceTable(startNode, startNode);
 
 		while (openList.size() > 0 && iterations < testing) {
@@ -105,13 +105,13 @@ public class Dijkstra {
 							// remove from closed and reinsert to open with new
 							// path cost
 							deleteElementWithName(closedList, element);
-							sortedAdd(openList, element, current.cost + 1, heuristicManager.evaluateHeuristic(""));
+							sortedAdd(openList, element, current.cost + 1, heuristicManager.evaluateHeuristic(element));
 							// update reference table
 							updateReferenceTable(element, current.name);
 						}
 					} else {
 						// push to open list as it has not already been seen
-						sortedAdd(openList, element, current.cost + 1, heuristicManager.evaluateHeuristic(""));
+						sortedAdd(openList, element, current.cost + 1, heuristicManager.evaluateHeuristic(element));
 						updateReferenceTable(element, current.name);
 						// update reference table
 
