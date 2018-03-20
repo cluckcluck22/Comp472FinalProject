@@ -21,13 +21,13 @@ public class DijkstraTest {
 			Dijkstra obj = new Dijkstra();
 			//94
 			//Best: 23ms
-			obj.runDijkstra("rebwrbbbrrrbrbw");
+			//obj.runDijkstra("rebwrbbbrrrbrbw");
 			//5555
 			//Best:1882ms
 			//obj.runDijkstra("brbwwrrbbbbrerr");
 			//2520
 			//Best: 396ms
-			//obj.runDijkstra("rrbbrwbrrrwbebb");
+			obj.runDijkstra("rrbbrwbrrrwbebb");
 			System.out.println(obj.iterations);
 		}
 		long endTime = System.nanoTime();

@@ -22,12 +22,12 @@ import candyCrisis.Result;
  */
 public class FileHandler
 {
-	private final static String ABS_PATH_READ = "src/Resources/Sample_Data.txt";
+	private final static String ABS_PATH_READ = "src/Resources/Sample_Challenge01.txt";
 	private final static String ABS_PATH_WRITE = "src/Resources/";
 	
 	private final static int MAX_ROW = 3;
 	private final static int MAX_COLUMN = 5;
-	private final static int NUM_OF_BOARD_PER_FILE = 3;
+	private final static int NUM_OF_BOARD_PER_FILE = 50;
 	
 	private char[][] board;					//To store a 3X5 board in 2D array form.
 	private List<char[][]> boardsList; 		//Arraylist of 3X5 boards.
