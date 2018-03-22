@@ -10,7 +10,7 @@ public class heuristicManager {
 	public static int evaluateHeuristic(String node)
 	{
 		
-		//TODO remove after testing
-		return SymmetryMatch.getSymmetryMatch1(node);
+		int h = (SymmetryMatch.getSymmetryMatch1(node)) + (SymmetryMatch.getSymmetryMatch2(node));
+	       return h;
 	}
 }
