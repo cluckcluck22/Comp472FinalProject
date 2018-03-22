@@ -27,7 +27,7 @@ public class FileHandler
 	
 	private final static int MAX_ROW = 3;
 	private final static int MAX_COLUMN = 5;
-	private final static int NUM_OF_BOARD_PER_FILE = 50;
+	private int NUM_OF_BOARD_PER_FILE;
 	
 	private char[][] board;					//To store a 3X5 board in 2D array form.
 	private List<char[][]> boardsList; 		//Arraylist of 3X5 boards.
@@ -46,7 +46,6 @@ public class FileHandler
 	{
 		this.boardCount = 0;
 		this.boardsList = new ArrayList<char[][]>();
-		this.emptyTileIndex = new int[NUM_OF_BOARD_PER_FILE];
 		this.boardString = "";
 		this.boardsStringList = new ArrayList<String>();
 		
@@ -80,6 +79,9 @@ public class FileHandler
 			{			
 				board = new char[MAX_ROW][MAX_COLUMN];
 				boardString = "";
+				
+				NUM_OF_BOARD_PER_FILE = resultList.size();
+				emptyTileIndex = new int[NUM_OF_BOARD_PER_FILE];
 				
 				for(int m = 0; m < MAX_ROW; m++)
 				{
