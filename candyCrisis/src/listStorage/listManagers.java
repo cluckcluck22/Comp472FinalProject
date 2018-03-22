@@ -94,6 +94,8 @@ public class listManagers {
 	{
 		
 		Node insert = new Node(element,cost,heuristic,parent);
+		insertVal(openListOrder,0,openListSize,insert);
+		/*
 		boolean  added = false;
 		for(int i = 0 ;i < openListSize; i++)
 		{
@@ -104,12 +106,55 @@ public class listManagers {
 				break;
 			}
 		}
+		
 		if(!added)
 		{
 			openListOrder.add(insert);
 		}
+		*/
 		openListSize ++;
 		this.openListExistence.insertValue(insert, generator.getBinaryArray(element), 0);
+	}
+	
+	public void insertVal(List<Node> list, int min, int max, Node newVal)
+	{
+		int index = (max-min)/2 + min;
+		if(max ==0)
+		{
+			list.add(0,newVal);
+			return;
+		}
+		Node tmpVal = list.get(index);
+		if(tmpVal.getCost() == newVal.getCost())
+		{
+			list.add(index, newVal);
+			return;
+		}
+		else if( index == min)
+		{
+			if(tmpVal.getCost() > newVal.getCost())
+			{
+				list.add(index,newVal);
+			}
+			else
+			{
+				list.add(index+1, newVal);
+			}
+			return;
+		}
+		else
+		{
+			if(newVal.getCost() < tmpVal.getCost())
+			{
+				insertVal(list,min, index, newVal);
+				return;
+			}
+			else
+			{
+				insertVal(list,index,max,newVal);
+				return;
+			}
+		}
 	}
 	
 	public boolean openListHasNext()
@@ -139,6 +184,7 @@ public class listManagers {
 		{
 			Node tmp = openListOrder.get(0);
 			openListOrder.remove(0);
+			this.openListExistence.removeNode(generator.getBinaryArray(tmp.name), 0);
 			openListSize --;
 			return tmp;
 		}
