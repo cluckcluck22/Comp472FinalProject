@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,13 +23,14 @@ import candyCrisis.Result;
  */
 public class FileHandler
 {
-	private final static String ABS_PATH_READ = "src/Resources/Sample_Challenge01.txt";
+	private final static String ABS_PATH_READ = "src/Resources/Sample_Challenge03.txt";
 	private final static String ABS_PATH_WRITE = "src/Resources/";
 	
 	private final static int MAX_ROW = 3;
 	private final static int MAX_COLUMN = 5;
 	private int NUM_OF_BOARD_PER_FILE;
 	
+	HashMap<Integer, Result> outputResult = new HashMap<Integer, Result>();	
 	private char[][] board;					//To store a 3X5 board in 2D array form.
 	private List<char[][]> boardsList; 		//Arraylist of 3X5 boards.
 	
@@ -125,13 +127,15 @@ public class FileHandler
 	//Method for store board history (path history and total game time) into a text file.
 	//Input: Result data structure (String str, int i)
 	//Output: A Output_Board.txt file in /Resources folder.
-	public void saveBoardResult(Result result)
+	public synchronized void saveBoardResult(Result result)
 	{
+		outputResult.put(result.index,result);
+		/*
 		String boardName = "Board" + boardCount;
 		
 		//Get NIO Path
 		Path path = Paths.get(ABS_PATH_WRITE + "Output_" + boardName + ".txt");
-		
+		byte[] pathHistoryStart = (result.startState + System.lineSeparator()).getBytes();
 		byte[] pathHistoryBA = (result.getPathHistory() + System.lineSeparator()).getBytes();
 		float resultMilleSec = (result.getTotalTime()/1000000);
 		byte[] totalTimeBA = (String.valueOf(resultMilleSec + "ms") + System.lineSeparator()).getBytes();
@@ -142,7 +146,7 @@ public class FileHandler
 			{
 				Files.createFile(path);
 			}
-			
+			Files.write(path, pathHistoryStart, StandardOpenOption.APPEND);
 			Files.write(path, pathHistoryBA, StandardOpenOption.APPEND);
 			Files.write(path, totalTimeBA, StandardOpenOption.APPEND);	
 		}
@@ -150,8 +154,38 @@ public class FileHandler
 		{
 			e.printStackTrace();
 		}
-		
+		*/
 		//boardCount++;
+	}
+	
+	public  void saveBoardResultFinal()
+	{
+		
+		String boardName = "Board" + boardCount;
+		
+		//Get NIO Path
+		Path path = Paths.get(ABS_PATH_WRITE + "Output_" + boardName + ".txt");
+		for(int i = 0; i < outputResult.size();i++)
+		{
+			Result result = outputResult.get(i);
+		byte[] pathHistoryBA = (result.getPathHistory() + System.lineSeparator()).getBytes();
+		float resultMilleSec = (result.getTotalTime()/1000000);
+		byte[] totalTimeBA = (String.valueOf(resultMilleSec + "ms") + System.lineSeparator()).getBytes();
+		
+		try
+		{
+			if(!Files.exists(path))
+			{
+				Files.createFile(path);
+			}
+			Files.write(path, pathHistoryBA, StandardOpenOption.APPEND);
+			Files.write(path, totalTimeBA, StandardOpenOption.APPEND);	
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		}
 	}
 	
 	//Method for BoardStateHandler class to retreive a char[][] (a board state).

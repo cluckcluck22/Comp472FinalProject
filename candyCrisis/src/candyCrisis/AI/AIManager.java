@@ -61,7 +61,7 @@ public class AIManager
 			totalBoardTime = endTime - startBoardTime;
 			totalGameTime = totalGameTime + totalBoardTime;
 			
-			Result result = new Result(resultPath, totalBoardTime); 
+			Result result = new Result(resultPath, totalBoardTime,"",0); 
 			
 			fileHandler.saveBoardResult(result);
 			
