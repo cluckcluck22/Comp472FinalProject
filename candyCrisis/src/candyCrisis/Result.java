@@ -9,13 +9,17 @@ package candyCrisis;
  */
 public class Result
 {
+	public String startState;
 	private String pathHistory;
 	private float totalTime;
+	public int index;
 	
-	public Result(String pathHistory, float totalTime)
+	public Result(String pathHistory, float totalTime,String startState,int index)
 	{
 		this.pathHistory = pathHistory;
 		this.totalTime = totalTime;
+		this.startState = startState;
+		this.index = index;
 	}
 
 	public String getPathHistory()

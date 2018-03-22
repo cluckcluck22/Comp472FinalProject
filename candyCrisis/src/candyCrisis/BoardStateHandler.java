@@ -166,7 +166,7 @@ public class BoardStateHandler {
 			
 			totalTime = endTime-startTime;
 			
-			Result r = new Result (pathHistory, totalTime);
+			Result r = new Result (pathHistory, totalTime,"",0);
 			
 			filer.saveBoardResult(r);
 			//FileHandler.saveBoardResult(r); // NOTE: I think we are only passing a single result at the end.

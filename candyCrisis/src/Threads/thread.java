@@ -10,6 +10,7 @@ import candyCrisis.FileHandler.FileHandler;
 public class thread implements Runnable {
 	String resultString;
 	String board;
+	int index;
 	long startBoardTime;
 	long endTime;
 	long totalBoardTime;
@@ -21,11 +22,12 @@ public class thread implements Runnable {
 		return result;
 	}
 	
-	public thread(String board,long startBoardTime,FileHandler fileHandler)
+	public thread(String board,long startBoardTime,FileHandler fileHandler,int index)
 	{
 		this.board = board;
 		this.startBoardTime = startBoardTime;
 		this.fileHandler = fileHandler;
+		this.index = index;
 	}
 	
 	private String getResultString(List<String> result)
@@ -52,7 +54,7 @@ public class thread implements Runnable {
     	resultString = getResultString(solver.runDijkstra(board));
     	endTime = System.nanoTime();
     	totalBoardTime = endTime - startBoardTime;
-    	result = new Result(resultString, totalBoardTime); 
+    	result = new Result(resultString, totalBoardTime,board,index); 
     	fileHandler.saveBoardResult(result);
     }
     public static void main(String args[]) throws InterruptedException {
@@ -64,10 +66,12 @@ public class thread implements Runnable {
 		boolean hasNextBoardString = false;
 		String boardString = "";		
 		hasNextBoardString = fileHandler.hasNextBoardString();
+		int  x = 0;
 		while(hasNextBoardString)
 		{
 			startBoardTime = System.nanoTime();					
-			myThreads.add(new Thread(new thread(fileHandler.getNextBoardString(),startBoardTime,fileHandler)));
+			myThreads.add(new Thread(new thread(fileHandler.getNextBoardString(),startBoardTime,fileHandler,x)));
+			x++;
 			//Restart process
 			hasNextBoardString = fileHandler.hasNextBoardString();
 		}
@@ -81,6 +85,8 @@ public class thread implements Runnable {
 			{
 				myThreads.get(i).join();
 			}
+			System.out.println("Writing out");
+			fileHandler.saveBoardResultFinal();
 			System.out.println("Done Everything");
 			long endTime = System.nanoTime();
 			System.out.println(((endTime - startBoardTime)/ 1000000) + "ms");
