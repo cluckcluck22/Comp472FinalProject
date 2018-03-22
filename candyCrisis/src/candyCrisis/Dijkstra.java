@@ -23,7 +23,7 @@ public class Dijkstra {
 	Map<String, String> referenceTable;
 
 	/************* Testing Data *******************/
-	public int testing = 10000;
+	public int testing = 100000000;
 	public int iterations = 0;
 	public boolean debug = false;
 

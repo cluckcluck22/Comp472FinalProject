@@ -14,7 +14,7 @@ public class listManagers {
 	
 	public listManagers(String board)
 	{
-		generator = new generateBinaryPath("rebwrbbbrrrbrbw");
+		generator = new generateBinaryPath(board);
 	}
 	
 	public Node getNodeFromOpenListExistence(String element)
