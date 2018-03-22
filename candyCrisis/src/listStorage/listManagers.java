@@ -32,46 +32,23 @@ public class listManagers {
 	
 	public void updateOpenlist(String element,int cost,String parent)
 	{
-		Node move = null;
+		Node move = this.getNodeFromOpenListExistence(element);
+		move.parent = parent;
+		//removeVal(openListOrder,0,openListSize,move);
+		
 		for(int i = 0; i < openListSize; i++)
 		{
 			if(openListOrder.get(i).name.equals(element))
 			{
-				move = openListOrder.get(i);
-				move.parent = parent;
-				break;
-			}
-		}
-		move.cost = cost;
-		boolean added = false;
-		for(int i = 0; i < openListSize; i++)
-		{
-			if(move.getCost() < openListOrder.get(i).getCost())
-			{
-				openListOrder.add(i,move);
-				added = true;
-				break;
-			}
-		}
-		if(!added)
-		{
-			openListOrder.add(move);
-		}
-		openListSize++;
-
-	}
-	
-	public void updateOpenlist(Node element,int cost,String parent)
-	{
-		element.parent = parent;
-		for(int i = 0; i < openListSize; i++)
-		{
-			if(openListOrder.get(i).name.equals(element.name))
-			{
 				openListOrder.remove(i);
+				break;
 			}
 		}
-		element.cost = cost;
+		
+		openListSize--;
+		move.cost = cost;
+		insertVal(openListOrder,0,openListSize,move);
+		/*
 		boolean added = false;
 		for(int i = 0; i < openListSize; i++)
 		{
@@ -85,7 +62,44 @@ public class listManagers {
 		if(!added)
 		{
 			openListOrder.add(element);
+		}*/
+		
+		openListSize++;
+	}
+	
+	public void updateOpenlist(Node element,int cost,String parent)
+	{
+		element.parent = parent;
+		//removeVal(openListOrder,0,openListSize,element);
+		
+		for(int i = 0; i < openListSize; i++)
+		{
+			if(openListOrder.get(i).name.equals(element.name))
+			{
+				openListOrder.remove(i);
+				break;
+			}
 		}
+		
+		openListSize--;
+		element.cost = cost;
+		insertVal(openListOrder,0,openListSize,element);
+		/*
+		boolean added = false;
+		for(int i = 0; i < openListSize; i++)
+		{
+			if(element.getCost() < openListOrder.get(i).getCost())
+			{
+				openListOrder.add(i,element);
+				added = true;
+				break;
+			}
+		}
+		if(!added)
+		{
+			openListOrder.add(element);
+		}*/
+		
 		openListSize++;
 
 	}
@@ -95,25 +109,33 @@ public class listManagers {
 		
 		Node insert = new Node(element,cost,heuristic,parent);
 		insertVal(openListOrder,0,openListSize,insert);
-		/*
-		boolean  added = false;
-		for(int i = 0 ;i < openListSize; i++)
-		{
-			if(insert.getCost() < openListOrder.get(i).getCost())
-			{
-				openListOrder.add(i,insert);
-				added = true;
-				break;
-			}
-		}
-		
-		if(!added)
-		{
-			openListOrder.add(insert);
-		}
-		*/
 		openListSize ++;
 		this.openListExistence.insertValue(insert, generator.getBinaryArray(element), 0);
+	}
+	public void removeVal(List<Node> list, int min, int max, Node oldVal)
+	{
+		int index = (max-min)/2 + min;
+		Node tmpVal = list.get(index);
+		if(tmpVal.name.equals(oldVal.name))
+		{
+			list.remove(index);
+			return;
+		}
+		else if(tmpVal.name.equals(list.get(index + 1).name))
+		{
+			list.remove(index + 1);
+		}
+		else
+		{
+			if(oldVal.getCost() < tmpVal.getCost())
+			{
+				removeVal(list,min, index, oldVal);
+			}
+			else
+			{
+				removeVal(list,index,max,oldVal);
+			}
+		}
 	}
 	
 	public void insertVal(List<Node> list, int min, int max, Node newVal)

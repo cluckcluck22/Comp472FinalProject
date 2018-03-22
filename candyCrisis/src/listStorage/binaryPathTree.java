@@ -1,3 +1,11 @@
+/* Class: binaryPathTree.java
+ * Programmer: Eric Davies
+ * Date: 22/3/30218
+ * Description: A class node that is used to generate a binary tree that can store node values in its leaves. The tree is based off of the binary
+ * 	representation of 
+ * 
+ */
+
 package listStorage;
 
 import java.util.List;
