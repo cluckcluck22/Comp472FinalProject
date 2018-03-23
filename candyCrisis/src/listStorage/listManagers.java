@@ -5,7 +5,8 @@ import java.util.List;
 
 import candyCrisis.Node;
 
-public class listManagers {
+public class listManagers 
+{
 	binaryPathTree openListExistence = new binaryPathTree();
 	binaryPathTree closedListExistence = new binaryPathTree();
 	List<Node> openListOrder = new ArrayList<Node>();
@@ -116,6 +117,7 @@ public class listManagers {
 	{
 		int index = (max-min)/2 + min;
 		Node tmpVal = list.get(index);
+		
 		if(tmpVal.name.equals(oldVal.name))
 		{
 			list.remove(index);
@@ -141,12 +143,15 @@ public class listManagers {
 	public void insertVal(List<Node> list, int min, int max, Node newVal)
 	{
 		int index = (max-min)/2 + min;
+		
 		if(max ==0)
 		{
 			list.add(0,newVal);
 			return;
 		}
+		
 		Node tmpVal = list.get(index);
+		
 		if(tmpVal.getCost() == newVal.getCost())
 		{
 			list.add(index, newVal);
@@ -199,7 +204,6 @@ public class listManagers {
 		this.closedListExistence.removeNode(generator.getBinaryArray(element), 0);
 	}
 	
-	
 	public Node openListGetFirst()
 	{
 		if(openListSize > 0)
@@ -215,5 +219,4 @@ public class listManagers {
 			return null;
 		}
 	}
-	
 }
