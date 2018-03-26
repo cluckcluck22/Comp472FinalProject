@@ -165,9 +165,11 @@ public class FileHandler
 		
 		//Get NIO Path
 		Path path = Paths.get(ABS_PATH_WRITE + "Output_" + boardName + ".txt");
+		int moves = 0;
 		for(int i = 0; i < outputResult.size();i++)
 		{
 			Result result = outputResult.get(i);
+			moves += outputResult.size();
 		byte[] pathHistoryBA = (result.getPathHistory() + System.lineSeparator()).getBytes();
 		float resultMilleSec = (result.getTotalTime()/1000000);
 		byte[] totalTimeBA = (String.valueOf(resultMilleSec + "ms") + System.lineSeparator()).getBytes();
@@ -186,6 +188,14 @@ public class FileHandler
 			e.printStackTrace();
 		}
 		}
+		byte[] pathHistoryBA = (String.valueOf(moves)).getBytes();
+		try {
+			Files.write(path, pathHistoryBA, StandardOpenOption.APPEND);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	//Method for BoardStateHandler class to retreive a char[][] (a board state).
