@@ -171,7 +171,7 @@ public class FileHandler
 			Result result = outputResult.get(i);
 			moves += outputResult.size();
 		byte[] pathHistoryBA = (result.getPathHistory() + System.lineSeparator()).getBytes();
-		float resultMilleSec = (result.getTotalTime()/1000000);
+		int resultMilleSec = (int) (result.getTotalTime()/1000000);
 		byte[] totalTimeBA = (String.valueOf(resultMilleSec + "ms") + System.lineSeparator()).getBytes();
 		
 		try
