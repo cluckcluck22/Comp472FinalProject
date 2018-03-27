@@ -2,7 +2,7 @@
  * Programmer: Eric Davies
  * Date: 22/3/30218
  * Description: A class node that is used to generate a binary tree that can store node values in its leaves. The tree is based off of the binary
- * 	representation of 
+ * 	representation of the state string, which is using 3 bit level to have up to 8 unique results.
  * 
  */
 
@@ -17,11 +17,6 @@ public class binaryPathTree {
 	binaryPathTree zero = null;
 	binaryPathTree one = null;
 	Node current = null;
-	
-	public binaryPathTree()
-	{
-		
-	}
 	
 	public void insertValue(Node val, List<Character> path, int index)
 	{
