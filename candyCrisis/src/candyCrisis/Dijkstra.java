@@ -290,10 +290,11 @@ public class Dijkstra {
 		path.add(0, goal);
 		while (true) {
 			item = referenceTable.get(item);
-			path.add(0, item);
+			
 			if (item.equals(start)) {
 				return path;
 			}
+			path.add(0, item);
 		}
 	}
 
