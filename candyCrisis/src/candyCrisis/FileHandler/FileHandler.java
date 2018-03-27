@@ -163,8 +163,15 @@ public class FileHandler
 		
 		String boardName = "Board" + boardCount;
 		
+		String outputFileName = "Output_" + boardName + ".txt";
+		
+		if(ABS_PATH_READ.indexOf("input1.txt")!=-1) {outputFileName="output1.txt";}
+		else if(ABS_PATH_READ.indexOf("input2.txt")!=-1){outputFileName="output2.txt";}
+		else if(ABS_PATH_READ.indexOf("input3.txt")!=-1){outputFileName="output3.txt";}
+		else if(ABS_PATH_READ.indexOf("input4.txt")!=-1){outputFileName="output4.txt";}
+		
 		//Get NIO Path
-		Path path = Paths.get(ABS_PATH_WRITE + "Output_" + boardName + ".txt");
+		Path path = Paths.get(ABS_PATH_WRITE + outputFileName);
 		int moves = 0;
 		for(int i = 0; i < outputResult.size();i++)
 		{
