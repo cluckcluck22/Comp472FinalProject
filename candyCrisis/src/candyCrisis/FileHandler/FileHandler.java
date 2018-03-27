@@ -23,7 +23,7 @@ import candyCrisis.Result;
  */
 public class FileHandler
 {
-	private final static String ABS_PATH_READ = "src/Resources/Sample_Challenge03.txt";
+	private final static String ABS_PATH_READ = "src/Resources/Sample_Challenge04.txt";
 	private final static String ABS_PATH_WRITE = "src/Resources/";
 	
 	private final static int MAX_ROW = 3;
@@ -163,13 +163,22 @@ public class FileHandler
 		
 		String boardName = "Board" + boardCount;
 		
+		String outputFileName = "Output_" + boardName + ".txt";
+		
+		if(ABS_PATH_READ.indexOf("input1.txt")!=-1) {outputFileName="output1.txt";}
+		else if(ABS_PATH_READ.indexOf("input2.txt")!=-1){outputFileName="output2.txt";}
+		else if(ABS_PATH_READ.indexOf("input3.txt")!=-1){outputFileName="output3.txt";}
+		else if(ABS_PATH_READ.indexOf("input4.txt")!=-1){outputFileName="output4.txt";}
+		
 		//Get NIO Path
-		Path path = Paths.get(ABS_PATH_WRITE + "Output_" + boardName + ".txt");
+		Path path = Paths.get(ABS_PATH_WRITE + outputFileName);
+		int moves = 0;
 		for(int i = 0; i < outputResult.size();i++)
 		{
 			Result result = outputResult.get(i);
+			moves += outputResult.size();
 		byte[] pathHistoryBA = (result.getPathHistory() + System.lineSeparator()).getBytes();
-		float resultMilleSec = (result.getTotalTime()/1000000);
+		int resultMilleSec = (int) (result.getTotalTime()/1000000);
 		byte[] totalTimeBA = (String.valueOf(resultMilleSec + "ms") + System.lineSeparator()).getBytes();
 		
 		try
@@ -186,6 +195,14 @@ public class FileHandler
 			e.printStackTrace();
 		}
 		}
+		byte[] pathHistoryBA = (String.valueOf(moves)).getBytes();
+		try {
+			Files.write(path, pathHistoryBA, StandardOpenOption.APPEND);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	//Method for BoardStateHandler class to retreive a char[][] (a board state).

@@ -68,7 +68,7 @@ public class Dijkstra {
 
 			// check if goal state found
 			if (GoalStateChecker.isGoalStateAi(current.name)) {
-				System.out.println("Goal State Reached");
+				System.out.println(" - Goal State Reached");
 				return getPath(current.name, startNode);
 			}
 
@@ -290,10 +290,11 @@ public class Dijkstra {
 		path.add(0, goal);
 		while (true) {
 			item = referenceTable.get(item);
-			path.add(0, item);
+			
 			if (item.equals(start)) {
 				return path;
 			}
+			path.add(0, item);
 		}
 	}
 

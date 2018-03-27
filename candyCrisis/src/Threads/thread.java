@@ -2,12 +2,14 @@ package Threads;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import candyCrisis.Dijkstra;
 import candyCrisis.Result;
 import candyCrisis.FileHandler.FileHandler;
 
-public class thread implements Runnable {
+public class thread implements Runnable 
+{
 	String resultString;
 	String board;
 	int index;
@@ -22,6 +24,7 @@ public class thread implements Runnable {
 		return result;
 	}
 	
+	//Thread constructor
 	public thread(String board,long startBoardTime,FileHandler fileHandler,int index)
 	{
 		this.board = board;
@@ -49,7 +52,10 @@ public class thread implements Runnable {
 		System.out.print(resultString);
 		return resultString;
 	}
-    public void run() {
+    
+	//Each thread will run this
+	public void run() 
+	{
     	Dijkstra solver = new Dijkstra();
     	resultString = getResultString(solver.runDijkstra(board));
     	endTime = System.nanoTime();
@@ -57,16 +63,20 @@ public class thread implements Runnable {
     	result = new Result(resultString, totalBoardTime,board,index); 
     	fileHandler.saveBoardResult(result);
     }
-    public static void main(String args[]) throws InterruptedException {
+    
+	/* Drive */
+	public static void main(String args[]) throws InterruptedException 
+	{
     	List<Thread> myThreads = new ArrayList<Thread>();
         long startBoardTime = System.nanoTime();
 		
 		FileHandler  fileHandler = new FileHandler();
     	
 		boolean hasNextBoardString = false;
-		String boardString = "";		
+		//String boardString = "";		
 		hasNextBoardString = fileHandler.hasNextBoardString();
-		int  x = 0;
+		int  x = 0; //Board number
+		
 		while(hasNextBoardString)
 		{
 			startBoardTime = System.nanoTime();					
@@ -75,21 +85,31 @@ public class thread implements Runnable {
 			//Restart process
 			hasNextBoardString = fileHandler.hasNextBoardString();
 		}
+		
 		System.out.println("Threads stored");
+		
 		for(int i = 0;i < myThreads.size();i++)
 		{
 			myThreads.get(i).start();
 		}
+		
 		System.out.println("Threads Started");
-			for(int i = 0;i< myThreads.size();i++)
-			{
-				myThreads.get(i).join();
-			}
-			System.out.println("Writing out");
-			fileHandler.saveBoardResultFinal();
-			System.out.println("Done Everything");
-			long endTime = System.nanoTime();
-			System.out.println(((endTime - startBoardTime)/ 1000000) + "ms");
+		
+		for(int i = 0;i< myThreads.size();i++)
+		{
+			myThreads.get(i).join();
+		}
+		
+		System.out.println(" - Writing out");
+		fileHandler.saveBoardResultFinal();
+		System.out.println("Done Everything");
+		
+		long endTime = System.nanoTime();
+		
+		System.out.println("Total Time: " + ((endTime - startBoardTime)/ 1000000) + " ms");
+		
+		long elapsedTime = System.nanoTime() - startBoardTime;
+		double elapsedSeconds = (elapsedTime / 1000000000.0);
+		System.out.println("Total Time: " + elapsedSeconds + " seconds");
     }
-
 }

@@ -14,7 +14,7 @@ public class Result
 	private float totalTime;
 	public int index;
 	
-	public Result(String pathHistory, float totalTime,String startState,int index)
+	public Result(String pathHistory, float totalTime, String startState, int index)
 	{
 		this.pathHistory = pathHistory;
 		this.totalTime = totalTime;
