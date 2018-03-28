@@ -7,34 +7,27 @@ public class MiddleRow {
 	
 	public static int getMiddleRowH(String board) {
 		
+		
+		
 		String middleRow = board.substring(5,10);
 		
-		//Hardcoding differentCandies would also work and may be more efficient
-		String differentCandies = "";
-		for(int i=0; i<5;i++) {
-			if(middleRow.charAt(i)!='_' &&  !differentCandies.contains(String.valueOf(middleRow.charAt(i)))) {
-				differentCandies+=middleRow.charAt(i);
-			}
-		}
-		//////////////////////////////////////////////////////////////////////
+		String differentCandies = "rbwygp";
 		
 		int value = 0;
+				
 		for(int i=0; i<differentCandies.length();i++) {
-			//System.out.println(differentCandies.charAt(i) + " occurs " + characterCount(differentCandies.charAt(i), middleRow) + " times");
-			if(characterCount(differentCandies.charAt(i), middleRow) % 2 == 1) { //if candy appears odd number of times in middle row
-				value++;
+			
+			//count how many times the candy appears in the middle row
+			char candy = differentCandies.charAt(i);
+			int counter = 0;
+			for(int j=0; j<5; j++) {
+				if(middleRow.charAt(j) == candy) counter++;
 			}
+			if (counter%2 == 1) {value++;}
+		
 		}
 		
 		return value;
 	}
-	
-	private static int characterCount(char c, String s) {
-		int counter = 0;
-		for(int i=0; i<s.length(); i++) {
-			if(s.charAt(i) == c) counter++;
-		}
-		return counter;
-	}
-	
+		
 }
