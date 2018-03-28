@@ -19,7 +19,7 @@ public class binaryPathTreeTest {
 	public void test() {
 		generateBinaryPath generator = new generateBinaryPath("rebwrbbbrrrbrbw");
 		binaryPathTree tree = new binaryPathTree();
-		Node passedNode = new Node("rebwrbbbrrrbrbw", 1, 0,"none");
+		Node passedNode = new Node("rebwrbbbrrrbrbw", 1, 0);
 		List<Character> baseRepresent = generator.getBinaryArray(passedNode.name);
 		List<Character> baseRepresent2 = generator.getBinaryArray("rebwrbbbrrrbrbb");
 		

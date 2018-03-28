@@ -31,7 +31,7 @@ public class listManagers
 	}
 	
 	
-	public void updateOpenlist(String element,int cost,String parent)
+	public void updateOpenlist(String element,int cost,Node parent)
 	{
 		Node move = this.getNodeFromOpenListExistence(element);
 		move.parent = parent;
@@ -68,7 +68,7 @@ public class listManagers
 		openListSize++;
 	}
 	
-	public void updateOpenlist(Node element,int cost,String parent)
+	public void updateOpenlist(Node element,int cost,Node parent)
 	{
 		element.parent = parent;
 		//removeVal(openListOrder,0,openListSize,element);
@@ -105,14 +105,23 @@ public class listManagers
 
 	}
 	
-	public void insertOpenList(String element, int cost, int heuristic,String parent)
+	public void insertOpenList(String element, int cost, int heuristic)
 	{
 		
-		Node insert = new Node(element,cost,heuristic,parent);
+		Node insert = new Node(element,cost,heuristic);
 		insertVal(openListOrder,0,openListSize,insert);
 		openListSize ++;
 		this.openListExistence.insertValue(insert, generator.getBinaryArray(element), 0);
 	}
+	public void insertOpenList(String element, int cost, int heuristic, Node Parent)
+	{
+		
+		Node insert = new Node(element,cost,heuristic,Parent);
+		insertVal(openListOrder,0,openListSize,insert);
+		openListSize ++;
+		this.openListExistence.insertValue(insert, generator.getBinaryArray(element), 0);
+	}
+	
 	public void removeVal(List<Node> list, int min, int max, Node oldVal)
 	{
 		int index = (max-min)/2 + min;
@@ -189,7 +198,7 @@ public class listManagers
 		return openListSize > 0;
 	}
 	
-	public void insertClosedList(String element, int cost, int heuristic,String parent)
+	public void insertClosedList(String element, int cost, int heuristic,Node parent)
 	{
 		Node insert = new Node(element, cost, heuristic,parent);
 		this.closedListExistence.insertValue(insert, generator.getBinaryArray(element), 0);

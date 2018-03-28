@@ -16,7 +16,7 @@ public class GenerateSuccessor {
 	
 	//Static function for the Dijkstra class, used to get a list of the valid successors of a given boardState (string start), in string format
 	//Returns a list of strings
-	public static List<String> getSuccessors(String start,String parent)
+	public static List<String> getSuccessors(String start,Node parent)
 	{
 		List<String> successors = new ArrayList<String>();
 		
@@ -30,25 +30,25 @@ public class GenerateSuccessor {
 		if( empty > 5 ) // if e isn't in the top row
 		{
 			top = getTop(start, empty);
-			if(!top.equals(parent))
+			if(!top.equals(parent.name))
 				successors.add(top);
 		}
 		if(	empty < 10 ) // if e isn't in the bot row
 		{
 			 bot = getBot(start, empty);
-			 if(!bot.equals(parent))
+			 if(!bot.equals(parent.name))
 				 successors.add(bot);
 		}
 		if( empty%5 != 0 ) // if e isn't in the left col 
 		{
 			left = getLeft(start, empty);
-			if(!left.equals(parent))
+			if(!left.equals(parent.name))
 				successors.add(left);
 		}
 		if( empty%5 != 4 ) // if e isn't in the right col 
 		{
 			right = getRight(start, empty);
-			if(!right.equals(parent))
+			if(!right.equals(parent.name))
 				successors.add(right);
 		}
 				

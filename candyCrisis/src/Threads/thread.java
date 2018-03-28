@@ -18,6 +18,7 @@ public class thread implements Runnable
 	long totalBoardTime;
 	public Result result;
 	FileHandler fileHandler;
+	boolean debug = false;
 	
 	public Result getResult()
 	{
@@ -35,8 +36,10 @@ public class thread implements Runnable
 	
 	private String getResultString(List<String> result)
 	{
-		displayStates(result);
-		
+		if(debug)
+		{
+			displayStates(result);
+		}
 		String resultString = "";
 		
 		for (String s : result)

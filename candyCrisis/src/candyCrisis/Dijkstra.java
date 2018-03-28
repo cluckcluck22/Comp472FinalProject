@@ -20,8 +20,6 @@ import listStorage.listManagers;
 public class Dijkstra {
 
 	//List<Node> openList, closedList;
-	Map<String, String> referenceTable;
-
 	/************* Testing Data *******************/
 	public int testing = 100000000;
 	public int iterations = 0;
@@ -56,11 +54,9 @@ public class Dijkstra {
 		//openList = new ArrayList<Node>();
 		//closedList = new ArrayList<Node>();
 		listManagers manage = new listManagers(startNode);
-		referenceTable = new HashMap<String, String>();
 		// *********************************
 
-		manage.insertOpenList(startNode, 0, heuristicManager.evaluateHeuristic(startNode),"");
-		updateReferenceTable(startNode, startNode);
+		manage.insertOpenList(startNode, 0, heuristicManager.evaluateHeuristic(startNode));
 
 		while (manage.openListHasNext() && iterations < testing) {
 			iterations++;
@@ -69,7 +65,7 @@ public class Dijkstra {
 			// check if goal state found
 			if (GoalStateChecker.isGoalStateAi(current.name)) {
 				System.out.println(" - Goal State Reached");
-				return getPath(current.name, startNode);
+				return getPath(current, startNode);
 			}
 
 			if (debug) {
@@ -93,10 +89,8 @@ public class Dijkstra {
 						// update path cost
 						//TODO test this works correctly
 						openElement.cost = current.cost + 1;
-						manage.updateOpenlist(element, openElement.cost,current.name);
+						manage.updateOpenlist(element, openElement.cost,current);
 						// update reference table
-						updateReferenceTable(element, current.name);
-
 					}
 				}
 				// check if node already been processed and on closed list
@@ -110,14 +104,12 @@ public class Dijkstra {
 							// remove from closed and reinsert to open with new
 							// path cost
 							manage.closedListRemove(closedElement.name);
-							manage.insertOpenList(element, current.cost + 1, heuristicManager.evaluateHeuristic(element),current.name);
+							manage.insertOpenList(element, current.cost + 1, heuristicManager.evaluateHeuristic(element),current);
 							// update reference table
-							updateReferenceTable(element, current.name);
 						}
 					} else {
 						// push to open list as it has not already been seen
-						manage.insertOpenList(element, current.cost + 1, heuristicManager.evaluateHeuristic(element),current.name);
-						updateReferenceTable(element, current.name);
+						manage.insertOpenList(element, current.cost + 1, heuristicManager.evaluateHeuristic(element),current);
 						// update reference table
 
 					}
@@ -199,11 +191,11 @@ public class Dijkstra {
 	public void sortedAdd(List<Node> list, String name, int cost, int heuristic,String parent) {
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).getCost() > cost + heuristic) {
-				list.add(i, new Node(name, cost, heuristic,parent));
+				list.add(i, new Node(name, cost, heuristic,null));
 				return;
 			}
 		}
-		list.add(new Node(name, cost, heuristic,parent));
+		list.add(new Node(name, cost, heuristic,null));
 	}
 
 	/*
@@ -259,18 +251,6 @@ public class Dijkstra {
 		System.out.println(output);
 	}
 
-	/*
-	 * Function: updateReferenceTable Params:
-	 * 
-	 * @ String child: name of the child node entry to update
-	 * 
-	 * @ String parent: name of the parent node to be set as the value in the
-	 * referenceTable Description: A function that inserts/updates the entry
-	 * with the key child and value parent
-	 */
-	public void updateReferenceTable(String child, String parent) {
-		referenceTable.put(child, parent);
-	}
 
 	/*
 	 * Function getPath Params:
@@ -284,17 +264,17 @@ public class Dijkstra {
 	 * state Description: A function that loops until it has fetched the
 	 * complete path from the reference table
 	 */
-	public List<String> getPath(String goal, String start) {
+	public List<String> getPath(Node goal, String startNode) {
 		List<String> path = new ArrayList<String>();
-		String item = goal;
-		path.add(0, goal);
+		Node item = goal;
+		path.add(0, goal.name);
 		while (true) {
-			item = referenceTable.get(item);
+			item = item.parent;
 			
-			if (item.equals(start)) {
+			if (item.name.equals(startNode)) {
 				return path;
 			}
-			path.add(0, item);
+			path.add(0, item.name);
 		}
 	}
 

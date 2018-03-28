@@ -23,7 +23,7 @@ import candyCrisis.Result;
  */
 public class FileHandler
 {
-	private final static String ABS_PATH_READ = "src/Resources/Sample_Challenge04.txt";
+	private final static String ABS_PATH_READ = "src/Resources/Sample_Challenge03.txt";
 	private final static String ABS_PATH_WRITE = "src/Resources/";
 	
 	private final static int MAX_ROW = 3;
