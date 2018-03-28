@@ -35,6 +35,8 @@ public class thread implements Runnable
 	
 	private String getResultString(List<String> result)
 	{
+		displayStates(result);
+		
 		String resultString = "";
 		
 		for (String s : result)
@@ -51,6 +53,16 @@ public class thread implements Runnable
 		}
 		System.out.print(resultString);
 		return resultString;
+	}
+	
+	private void displayStates(List<String> states) {
+		for (String s : states) {
+			System.out.println("-----");
+			System.out.println(s.substring(0,5));
+			System.out.println(s.substring(5,10));
+			System.out.println(s.substring(10,15));
+		}
+		System.out.println("-----");
 	}
     
 	//Each thread will run this
