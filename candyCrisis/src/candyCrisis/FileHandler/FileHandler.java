@@ -176,7 +176,7 @@ public class FileHandler
 		for(int i = 0; i < outputResult.size();i++)
 		{
 			Result result = outputResult.get(i);
-			moves += outputResult.size();
+			moves += result.getPathHistory().length();
 		byte[] pathHistoryBA = (result.getPathHistory() + System.lineSeparator()).getBytes();
 		int resultMilleSec = (int) (result.getTotalTime()/1000000);
 		byte[] totalTimeBA = (String.valueOf(resultMilleSec + "ms") + System.lineSeparator()).getBytes();
@@ -195,7 +195,7 @@ public class FileHandler
 			e.printStackTrace();
 		}
 		}
-		byte[] pathHistoryBA = (String.valueOf(moves)).getBytes();
+		byte[] pathHistoryBA = (String.valueOf(Integer.toString(moves))).getBytes();
 		try {
 			Files.write(path, pathHistoryBA, StandardOpenOption.APPEND);
 		} catch (IOException e) {
